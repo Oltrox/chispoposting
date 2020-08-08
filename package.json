@@ -1,0 +1,37 @@
+{
+  "name": "chispoposting",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "cd api && nodemon src/index.js --exec babel-node",
+    "build": "cd api && babel src --out-dir dist",
+    "start": "node api/dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Oltrox/chispoposting.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Oltrox/chispoposting/issues"
+  },
+  "homepage": "https://github.com/Oltrox/chispoposting#readme",
+  "dependencies": {
+    "@babel/polyfill": "^7.10.4",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "pg": "^8.3.0",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^6.3.4"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.11.1",
+    "@babel/node": "^7.10.5",
+    "@babel/preset-env": "^7.11.0",
+    "nodemon": "^2.0.4"
+  }
+}
