@@ -2,7 +2,6 @@ import Sequelize from 'sequelize';
 
 export const sequelize =  new Sequelize('postgres://postgres:chispoposting@161.97.90.191:5432/chispoposting');
 
-
 /*export const sequelize = new Sequelize(
     'postgres',
     'postgres',

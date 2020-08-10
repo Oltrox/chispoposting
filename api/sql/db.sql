@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS usuario (
     n_publicaciones INTEGER,
     m_castigo SMALLINT,
     m_elimicacion SMALLINT,
+    estado SMALLINT,
     PRIMARY KEY (c_usuario)
 );
 
