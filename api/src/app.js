@@ -2,7 +2,7 @@ import express, { json } from 'express';
 import morgan from 'morgan';
 
 // importing routes
-import sampleRoutes from './routes/sample';
+import usuarioRoutes from './routes/usuario';
 
 
 // initialization
@@ -13,6 +13,6 @@ app.use(morgan('dev'));
 app.use(json());
 
 // routes
-app.use('/api/sample', sampleRoutes);
+app.use('/api/usuario', usuarioRoutes);
 
 export default app;
