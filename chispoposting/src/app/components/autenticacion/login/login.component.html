@@ -1,1 +1,23 @@
-<p>login works!</p>
+<h1>Login</h1>
+
+<form class="form-group" [formGroup]="formularioLogin" (ngSubmit)="login()">
+
+    <input type ="text"  class="form-control"  placeholder="Nombre de Usuario" formControlName="id">
+    <div *ngIf="isSubmitted && formularioLogin.controls['id'].errors" class="alert alert-danger">  
+      <div *ngIf="formularioLogin.controls['id'].errors.required">Usuario requerido</div>  
+    </div> 
+    <br>
+
+  
+    <input type ="password" class="form-control"  placeholder="Contraseña" formControlName="password" >
+    <div *ngIf="isSubmitted && formularioLogin.controls['password'].errors" class="alert alert-danger">  
+      <div *ngIf="formularioLogin.controls['password'].errors.required">Contraseña requerida</div>  
+    </div>
+    <br>
+    
+
+    <input type= "submit" value= "Iniciar Sesión" class= "btn btn-primary">
+  
+  
+    
+  </form> 
