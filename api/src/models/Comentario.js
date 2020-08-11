@@ -2,6 +2,11 @@ import Sequelize from 'sequelize';
 import { sequelize } from '../database/database';
 
 const Comentario = sequelize.define('comentario', {
+    c_comentario: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
     c_usuario: {
         type: Sequelize.INTEGER,
         primaryKey: true
@@ -20,8 +25,9 @@ const Comentario = sequelize.define('comentario', {
         type: Sequelize.TEXT
     }
 },{
-    timestamps: false
+    timestamps: false,
+    freezeTableName: true
 });
 
 
-export default C_usuario;
+export default Comentario;

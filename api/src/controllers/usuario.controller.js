@@ -95,9 +95,11 @@ export async function deleteUsuario(req, res) {
                 id: id
             }
         });
-        res.json({
-            data: usuario
-        });
+        if (usuario) {
+            res.json({
+                data: usuario
+            });
+        };
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -114,7 +116,7 @@ export async function updateUsuario(req, res) {
         const { id_usuario } = req.params;
         var { id, password, correo, topico, f_nacimiento } = req.body;
 
-        var usuario = await Usuario.update({
+        let usuario = await Usuario.update({
             id: id,
             password: password
         },{
@@ -125,10 +127,12 @@ export async function updateUsuario(req, res) {
             plain: true
         });
 
-        res.json({
-            message: 'User Updated Successfully',
-            data: usuario
-        });
+        if (usuario) {
+            res.json({
+                message: 'User Updated Successfully',
+                data: usuario
+            });
+        }
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -138,10 +142,9 @@ export async function updateUsuario(req, res) {
     };
 };
 
-
-
 export async function testlogin(req, res) {
     console.log(req.body);
+
     res.json({
         message: 'ok'
     })

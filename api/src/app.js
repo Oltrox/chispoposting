@@ -4,8 +4,8 @@ import morgan from 'morgan';
 
 // importing routes
 import usuarioRoutes from './routes/usuario';
-import publicacionRoutes from './routes/publicacion'
-
+import publicacionRoutes from './routes/publicacion';
+import comentarioRoutes from './routes/comentario';
 
 // initialization
 const app = express();
@@ -18,5 +18,6 @@ app.use(cors());
 // routes
 app.use('/api/usuario', usuarioRoutes);
 app.use('/api/publicacion', publicacionRoutes);
+app.use('/api/comentario', comentarioRoutes);
 
 export default app;

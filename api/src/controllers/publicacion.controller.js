@@ -1,5 +1,4 @@
 import Publicacion from '../models/Publicacion';
-import Usuarios from '../models/Usuario';
 const { QueryTypes } = require('sequelize');
 import { sequelize } from '../database/database';
 
@@ -36,19 +35,20 @@ export async function createPublicacion( req, res ) {
 };
 
 export async function getPublicaciones( req, res ) {
+    console.log("########################33");
     console.log(req.body);
     try {
         var publicaciones = await Publicacion.findAll({
             where:{
                 visible: 0,
-                eleminado: 0,
+                eliminado: 0,
             }
         });
         res.json({
             data: publicaciones
         });
     } catch (error) {
-        console.json(error);
+        console.log(error);
         res.status(500).json({
             message: 'something goes wrong',
             data: {}
