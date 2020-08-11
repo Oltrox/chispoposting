@@ -21,6 +21,11 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+    if (localStorage.getItem("usuario")){
+      this.router.navigate(["inicio"]);
+    }
+
     this.crearFormulario();
 
   }
@@ -38,19 +43,18 @@ export class LoginComponent implements OnInit {
   login(){
     this.isSubmitted = true;
 
+    var login_usuario:Usuario = this.formularioLogin.value as Usuario;
+
     if (this.formularioLogin.valid){
-      this.ServicioAutenticacion.login(this.formularioLogin.value as Usuario).subscribe((res)=>{
+      this.ServicioAutenticacion.login(login_usuario).subscribe((res)=>{
 
         if(res.message == "ok"){
-
-          
+          this.ServicioAutenticacion.crearSesion(login_usuario.id);
+          this.router.navigate(["inicio"]);
         }
 
       })
     }
-
-    
-
 
   }
 

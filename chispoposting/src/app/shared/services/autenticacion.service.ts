@@ -11,7 +11,7 @@ import { Usuario } from '../models/usuario';
 export class AutenticacionService {
 
   
-  ruta: string = "http://localhost:4000/api"
+  ruta: string = "http://localhost:4000"
 
   constructor( private http: HttpClient ) { }
 
@@ -20,12 +20,21 @@ export class AutenticacionService {
   }
 
   obtenerUsuarios() : Observable<any> {
-    return this.http.get<any>(`${this.ruta}/usuario`);
+    return this.http.get<any>(`${this.ruta}/users`);
   }
 
   login(usuario: Usuario) : Observable<any> {
     console.log(usuario);
-    return this.http.post<any>(`${this.ruta}/usuario/login/`, usuario);
+    return this.http.post<any>(`${this.ruta}/login`, usuario);
+  }
+
+
+  crearSesion(usuario:string){
+    localStorage.setItem("usuario",usuario);
+  }
+
+  cerrarSesion(){
+    localStorage.removeItem("usuario");
   }
   
 

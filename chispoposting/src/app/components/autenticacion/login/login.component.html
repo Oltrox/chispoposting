@@ -2,14 +2,14 @@
 
 <form class="form-group" [formGroup]="formularioLogin" (ngSubmit)="login()">
 
-    <input type ="text"  class="form-control"  placeholder="Nombre de Usuario" formControlName="id">
+    <input type ="text"  class="form-control"  placeholder="Nombre de Usuario" formControlName="id" autocomplete="off">
     <div *ngIf="isSubmitted && formularioLogin.controls['id'].errors" class="alert alert-danger">  
       <div *ngIf="formularioLogin.controls['id'].errors.required">Usuario requerido</div>  
     </div> 
     <br>
 
   
-    <input type ="password" class="form-control"  placeholder="Contraseña" formControlName="password" >
+    <input type ="password" class="form-control"  placeholder="Contraseña" formControlName="password" autocomplete="off">
     <div *ngIf="isSubmitted && formularioLogin.controls['password'].errors" class="alert alert-danger">  
       <div *ngIf="formularioLogin.controls['password'].errors.required">Contraseña requerida</div>  
     </div>

@@ -2,19 +2,19 @@
 
 <form class="form-group" [formGroup]="formularioRegistro" (ngSubmit)="registrar()">
 
-  <input type ="text"  class="form-control"  placeholder="Nombre de Usuario" formControlName="id">
+  <input type ="text"  class="form-control"  placeholder="Nombre de Usuario" formControlName="id" autocomplete="off">
   <div *ngIf="isSubmitted && formularioRegistro.controls['id'].errors" class="alert alert-danger">  
     <div *ngIf="formularioRegistro.controls['id'].errors.required">Usuario requerido</div>  
   </div> 
   <br>
 
-  <input type ="email" class="form-control"  placeholder="Correo" formControlName="correo" >
+  <input type ="email" class="form-control"  placeholder="Correo" formControlName="correo" autocomplete="off">
   <div *ngIf="isSubmitted && formularioRegistro.controls['correo'].errors" class="alert alert-danger">  
     <div *ngIf="formularioRegistro.controls['correo'].errors.required">Correo requerido</div>  
   </div>
   <br>
 
-  <input type ="password" class="form-control"   placeholder="Contraseña" formControlName="password" >
+  <input type ="password" class="form-control"   placeholder="Contraseña" formControlName="password" autocomplete="off">
   <div *ngIf="isSubmitted && formularioRegistro.controls['password'].errors" class="alert alert-danger">  
     <div *ngIf="formularioRegistro.controls['password'].errors.required">Contraseña requerido</div>  
   </div>
@@ -23,14 +23,14 @@
   <div>
     <label>Fecha de Nacimiento</label>
 
-    <input type="date" class="form-control"  formControlName="f_nacimiento" min="1950-01-01" [max]="f_maxima" >
+    <input type="date" class="form-control"  formControlName="f_nacimiento" min="1950-01-01" [max]="f_maxima" autocomplete="off">
     <div *ngIf="isSubmitted && formularioRegistro.controls['f_nacimiento'].errors" class="alert alert-danger">  
       <div *ngIf="formularioRegistro.controls['f_nacimiento'].errors.required">Fecha requerida</div>  
     </div>
     <br>
   </div> 
  
-  <input type ="text" class="form-control"  placeholder="Topico" formControlName="topico" >
+  <input type ="text" class="form-control"  placeholder="Topico" formControlName="topico" autocomplete="off">
   <div *ngIf="isSubmitted && formularioRegistro.controls['topico'].errors" class="alert alert-danger">  
     <div *ngIf="formularioRegistro.controls['topico'].errors.required">Topico requerido</div>  
   </div>
