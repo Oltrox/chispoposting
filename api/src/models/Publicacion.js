@@ -1,10 +1,10 @@
-import Sequelize, { INET } from 'sequelize';
+import Sequelize from 'sequelize';
 import { sequelize } from '../database/database';
-import Usuario from './Usuario';
 
 const Publicacion = sequelize.define('publicacion', {
     c_publicacion: {
         type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true
     },
     c_usuario: {
@@ -38,7 +38,8 @@ const Publicacion = sequelize.define('publicacion', {
         type: Sequelize.SMALLINT
     }
 },{
-    timestamps: false
+    timestamps: false,
+    freezeTableName: true
 });
 
 export default Publicacion;

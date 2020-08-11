@@ -8,7 +8,8 @@ const Usuario = sequelize.define('usuario', {
         primaryKey: true
     },
     id: {
-        type: Sequelize.CHAR(12)
+        type: Sequelize.CHAR(12),
+        unique: true
     },
     password: {
         type: Sequelize.CHAR(64)
@@ -50,6 +51,9 @@ const Usuario = sequelize.define('usuario', {
         type: Sequelize.SMALLINT
     },
     m_elimicacion: {
+        type: Sequelize.SMALLINT
+    },
+    estado: {
         type: Sequelize.SMALLINT
     }
 },{
