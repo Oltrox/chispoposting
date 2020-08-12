@@ -11,12 +11,14 @@
   <input type ="email" class="form-control"  placeholder="Correo" formControlName="correo" autocomplete="off">
   <div *ngIf="isSubmitted && formularioRegistro.controls['correo'].errors" class="alert alert-danger">  
     <div *ngIf="formularioRegistro.controls['correo'].errors.required">Correo requerido</div>  
+    <div *ngIf="formularioRegistro.controls['correo'].errors.email">Debe ingresar un correo válido</div>  
   </div>
   <br>
 
   <input type ="password" class="form-control"   placeholder="Contraseña" formControlName="password" autocomplete="off">
   <div *ngIf="isSubmitted && formularioRegistro.controls['password'].errors" class="alert alert-danger">  
     <div *ngIf="formularioRegistro.controls['password'].errors.required">Contraseña requerido</div>  
+    <div *ngIf="formularioRegistro.controls['password'].errors.minlength">La contraseña debe tener al menos 8 caracteres</div>  
   </div>
   <br>
   
@@ -30,7 +32,16 @@
     <br>
   </div> 
  
-  <input type ="text" class="form-control"  placeholder="Topico" formControlName="topico" autocomplete="off">
+  <div class="form-group">
+    <label for="topico">Topico</label>
+    <select type="text" class="form-control" formControlName="topico">
+      <option value="1">Cine</option>
+      <option value="2">Memes</option>
+      <option value="3">Anime</option>
+      <option value="4">Game</option>
+      <option value="5">Blog</option>
+    </select>
+  </div>
   <div *ngIf="isSubmitted && formularioRegistro.controls['topico'].errors" class="alert alert-danger">  
     <div *ngIf="formularioRegistro.controls['topico'].errors.required">Topico requerido</div>  
   </div>

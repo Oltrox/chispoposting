@@ -22,12 +22,13 @@ export class UsuariosService {
     return this.http.post<any>(`${this.ruta}/usuario`, usuario);
   }
 
-  modificarUsuario(usuario: Usuario){
-    return this.http.put<any>(`${this.ruta}/modifyuser/${usuario.id}`, usuario);
+  // llega
+  modificarUsuarioPass(modificacion: any, id_usuario: string): Observable<any>{
+    return this.http.put<any>(`${this.ruta}/usuario/${id_usuario}`, modificacion);
   }
 
-  eliminarUsuario(usuario: Usuario){
-    return this.http.delete<any>(`${this.ruta}/deleteuser/${usuario.id}`);
+  modificarUsuarioTopico(modificacion: any, id_usuario: string): Observable<any>{
+    return this.http.put<any>(`${this.ruta}/usuario/${id_usuario}`, modificacion);
   }
 
   // llega

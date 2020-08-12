@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms'
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './shared/routing/app-routing.module';
 
@@ -17,6 +18,8 @@ import { CarruselComponent } from './components/inicio/carrusel/carrusel.compone
 import { PublicacionComponent } from './components/publicacion/publicacion.component';
 import { PublicacionComentarioComponent } from './components/publicacion/publicacion-comentario/publicacion-comentario.component';
 import { PublicacionDetalleComponent } from './components/publicacion/publicacion-detalle/publicacion-detalle.component';
+import { ModificarPerfilComponent } from './components/inicio/perfil/modificar-perfil/modificar-perfil.component';
+import { AgregarPublicacionComponent } from './components/publicacion/agregar-publicacion/agregar-publicacion.component';
 
 import { PublicacionesService } from './shared/services/publicaciones.service';
 import { UsuariosService } from './shared/services/usuarios.service';
@@ -37,14 +40,17 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     NotificacionesComponent,
     CarruselComponent,
     PublicacionComponent,
-    PublicacionComentarioComponent
+    PublicacionComentarioComponent,
+    ModificarPerfilComponent,
+    AgregarPublicacionComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    NgbModule
+    NgbModule,
+    FormsModule
   ],
   providers: [
     PublicacionesService,

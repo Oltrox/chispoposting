@@ -1,49 +1,53 @@
-
-
-<div class="container mt-3">
-    <div class="row align-items-center" *ngIf="!isForeign">
-        <div class="col-4 text-center" style="border: 1px solid black">
-            <img [src]="this.ServicioUsuario.usuarioActivo.l_foto" width="50%" height="50%" alt="">
-        </div>
-        
-        <div class="col-8" style="border: 1px solid black">
-            <h2>{{ this.ServicioUsuario.usuarioActivo.id }}<button class="btn btn-primary mx-5">Modificar perfil</button></h2>
-            <h4 class= "font-weight-light">Descripcion</h4>
-            <h2>"</h2>
-            <p class= "font-weight-light"> {{ this.ServicioUsuario.usuarioActivo.descripcion }}</p>
-            <h2>"</h2>
-            <div class="row mt-3">
-                <div class="col"> Seguidores: {{ this.ServicioUsuario.usuarioActivo.n_seguidores }}</div>
-                <div class="col"> Publicaciones: {{ this.ServicioUsuario.usuarioActivo.n_publicaciones }}</div>
-                <div class="col"> Seguidos: {{ this.ServicioUsuario.usuarioActivo.n_seguidos }} </div>
-            </div>
-        </div>
-    </div>
-
-    <div *ngIf="isForeign">
-        <div class="row align-items-center" *ngIf="isUser else noexiste">
-          <div class="col-4 text-center" style="border: 1px solid black">
-              <img [src]="usuario.l_foto" width="50%" height="50%" alt="">
+  <!-- Detalles -->
+  <div class="container mt-3">
+      <div class="row align-items-center bg-info" *ngIf="!isForeign">
+          <div class="col-2 text-center bg-dark">
+              <img [src]="this.ServicioUsuario.usuarioActivo.l_foto" width="50%" height="50%" alt="">
           </div>
           
-          <div class="col-8" style="border: 1px solid black">
-              <h2>{{ usuario.id }}</h2>
+          <div class="col-10 bg-light" style="padding-bottom: 2rem;">
+              <div class="row" style="margin-left: 300px;">
+                <h2>{{ this.ServicioUsuario.usuarioActivo.id }}</h2>
+                <button class="btn btn-dark mx-5" [routerLink]="['/inicio/modificarperfil']" >Modificar perfil</button>  
+              </div>
               <h4 class= "font-weight-light">Descripcion</h4>
-              <h2>"</h2>
-              <p class= "font-weight-light"> {{ usuario.descripcion }}</p>
-              <h2>"</h2>
+
+              <p class= "font-weight-light"> {{ this.ServicioUsuario.usuarioActivo.descripcion }}</p>
+
               <div class="row mt-3">
-                  <div class="col"> Seguidores: {{ usuario.n_seguidores }}</div>
-                  <div class="col"> Publicaciones: {{ usuario.n_publicaciones }}</div>
-                  <div class="col"> Seguidos: {{ usuario.n_seguidos }} </div>
+                  <div class="col"> Seguidores: {{ this.ServicioUsuario.usuarioActivo.n_seguidores }}</div>
+                  <div class="col"> Publicaciones: {{ this.ServicioUsuario.usuarioActivo.n_publicaciones }}</div>
+                  <div class="col"> Seguidos: {{ this.ServicioUsuario.usuarioActivo.n_seguidos }} </div>
               </div>
           </div>
       </div>
-    </div>
-</div>
 
-<div class="container" *ngIf="isForeign && isUser || !isForeign">
-    <h1 class="font-weight-light text-center text-lg-left mt-4 mb-0">Publicaciones</h1>
+      <div *ngIf="isForeign">
+          <div class="row align-items-center" *ngIf="isUser else noexiste">
+            <div class="col-4 text-center" style="border: 1px solid black">
+                <img [src]="usuario.l_foto" width="50%" height="50%" alt="">
+            </div>
+            
+            <div class="col-8" style="border: 1px solid black">
+                <h2>{{ usuario.id }}</h2>
+                <h4 class= "font-weight-light">Descripcion</h4>
+                <h2>"</h2>
+                <p class= "font-weight-light"> {{ usuario.descripcion }}</p>
+                <h2>"</h2>
+                <div class="row mt-3">
+                    <div class="col"> Seguidores: {{ usuario.n_seguidores }}</div>
+                    <div class="col"> Publicaciones: {{ usuario.n_publicaciones }}</div>
+                    <div class="col"> Seguidos: {{ usuario.n_seguidos }} </div>
+                </div>
+            </div>
+        </div>
+      </div>
+  </div>
+  <!-- End Detalles -->
+
+  <!-- Publicaciones -->
+  <div class="container" *ngIf="isForeign && isUser || !isForeign">
+    <h1 class="font-weight-light text-center mt-4 mb-0">Publicaciones</h1>
     <hr class="mt-2 mb-5">
 
     <div *ngIf="publicacionesUsuario.length > 0 else nohay">
@@ -55,10 +59,8 @@
         </div>
       </div>
     </div>
-
-
-    
   </div>
+  <!-- End Publicaciones -->
 
 
   <ng-template #nohay>

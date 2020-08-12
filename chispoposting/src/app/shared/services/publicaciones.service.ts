@@ -31,4 +31,8 @@ export class PublicacionesService {
     return this.http.get<any>(`${this.ruta}/propias/${id}`);
   }
 
+  publicar(publicacion: Publicacion): Observable<any>{
+    return this.http.post<any>(`${this.ruta}/`,publicacion);
+  }
+
 }

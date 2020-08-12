@@ -1,3 +1,17 @@
-<div class="alert alert-primary" *ngFor="let comentario of comentarios">
-    {{ comentario.comentario }}
+
+<div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Comentario..." [(ngModel)]="nuevo_comentario">
+    <div class="input-group-append">
+      <button (click)="agregarComentario()" class="btn btn-outline-primary" type="button">Send</button>
+    </div>
+  </div>
+
+
+<div class="alert alert-primary alert-dismissible fade show"*ngFor="let comentario of comentarios; let indice of index;">
+  {{ comentario.comentario }}
+  
+    <button *ngIf="this.ServicioUsuarios.usuarioActivo.c_usuario == comentario.c_usuario" type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="eliminarComentario(comentario.c_comentario, indice)">
+      <span aria-hidden="true">X</span>
+    </button>
 </div>
+

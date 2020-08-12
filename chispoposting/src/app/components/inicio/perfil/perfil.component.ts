@@ -16,7 +16,7 @@ export class PerfilComponent implements OnInit {
   publicacionesUsuario: Array<Publicacion> = new Array<Publicacion>();
   usuario: Usuario = new Usuario();
   paramRuta: string;
-  
+
   isForeign = true;
   isUser = false;
 
@@ -92,5 +92,7 @@ export class PerfilComponent implements OnInit {
   ngOnDestroy() {
     this.sub.unsubscribe();
   }
+
+
 
 }

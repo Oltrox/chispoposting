@@ -1,0 +1,61 @@
+
+<div class="container mt-3">
+    <div class="row">
+
+      <div class="col-12">
+        
+        <form class="form-group" [formGroup]="formularioModificacionPass" (ngSubmit)="modificarPass()">
+          
+          <h1>Cambio de contraseña</h1>
+
+          <div class="form-group">
+            <label for="password">Password Actual</label>
+            <input type="password" class="form-control" formControlName="c_antigua" placeholder="Password Actual">
+
+            <div *ngIf="isSubmittedPass && formularioModificacionPass.controls['c_antigua'].errors" class="alert alert-danger">  
+              <div *ngIf="formularioModificacionPass.controls['c_antigua'].errors.required">Contraseña requerido</div>  
+              <div *ngIf="formularioModificacionPass.controls['c_antigua'].errors.minlength">Se requiere contraseña de 8 caracteres</div>  
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="password_new">Password Nueva</label>
+            <input type="password" class="form-control" formControlName="c_nueva" placeholder="Password Nueva">
+            
+            <div *ngIf="isSubmittedPass && formularioModificacionPass.controls['c_nueva'].errors" class="alert alert-danger">  
+              <div *ngIf="formularioModificacionPass.controls['c_nueva'].errors.required">Contraseña requerido</div>  
+              <div *ngIf="formularioModificacionPass.controls['c_nueva'].errors.minlength">Se requiere contraseña de 8 caracteres</div>  
+            </div>
+          </div>
+  
+          <button class="btn btn-primary" type= "submit">Sustituir contraseña</button>
+        </form>
+      </div>
+
+      <div class="col-12">
+        <form class="form-group" [formGroup]="formularioModificacionTopico" (ngSubmit)="modificarTopico()">
+
+          <h1>Cambio de tópico (Actual: {{ topicos[this.ServicioUsuario.usuarioActivo.topico] }})</h1>
+
+          <div class="form-group">
+            <label for="topico">Topico</label>
+            <select type="text" class="form-control" formControlName="topico">
+              <option value="1">Cine</option>
+              <option value="2">Memes</option>
+              <option value="3">Anime</option>
+              <option value="4">Game</option>
+              <option value="5">Blog</option>
+            </select>
+          </div>
+
+          <div *ngIf="isSubmittedTopico && formularioModificacionTopico.controls['topico'].errors" class="alert alert-danger">  
+            <div *ngIf="formularioModificacionTopico.controls['topico'].errors.required">Seleccione topico</div>   
+          </div>
+
+          <button class="btn btn-primary" type= "submit">Cambiar Tópico </button>
+
+        </form>
+      </div>
+      
+    </div>
+
+</div>

@@ -35,8 +35,13 @@ export class CarruselComponent implements OnInit {
   }
 
   prev(): void {
-    this.pos -=1;
-    this.pos =  (this.pos % this.publicaciones.length)* -1;
+
+    if(this.pos > 0){
+      this.pos -=1;
+    }else{
+      this.pos = this.publicaciones.length;
+    }
+    
     this.publicacionActual = this.publicaciones[this.pos];
 
   }

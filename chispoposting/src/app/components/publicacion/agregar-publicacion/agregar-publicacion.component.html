@@ -1,0 +1,36 @@
+<div class="container text-white mt-6">
+    <div class="row justify-content-center">
+
+      <div class="col-6 mg-auto bg-dark" style="margin-top:5rem">
+        
+        <form class="form-group" [formGroup]="formularioPublicar">
+          
+          <h1>Publicar</h1>
+          <div class="form-group">
+            <label for="titulo">Titulo</label>
+            <input type="text" class="form-control" formControlName="titulo" placeholder="Titulo">
+          </div>
+          <div class="form-group">
+            <label for="link">Contenido</label>
+            <input type="text" class="form-control" formControlName="link" placeholder="Link-Texto">
+          </div>
+          <div class="form-group">
+            <label for="descripcion">Descripcion</label>
+            <input type="text" class="form-control" formControlName="descripcion" placeholder="Descripcion">
+          </div>
+  
+          <button class="btn btn-warning" type= "submit" (click)="publicar()">PUBLICAR!!</button>
+        </form>
+      </div>
+
+    </div>
+
+
+<!--
+      c_publicacion: number = 0,
+      c_usuario: number = 0,
+      link: string = "",
+-->
+
+
+</div>

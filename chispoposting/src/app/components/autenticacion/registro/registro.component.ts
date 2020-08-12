@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 })
 export class RegistroComponent implements OnInit {
 
+  topicos = {"1": "Cine", "2": "Memes", "3":"Anime", "4":"Game", "5":"Blog"};
   formularioRegistro: FormGroup;
   isSubmitted: boolean = false;
   isAccepted: boolean = false;
@@ -58,6 +59,7 @@ export class RegistroComponent implements OnInit {
     if (this.formularioRegistro.valid){
 
       var registro_usuario = this.formularioRegistro.value as Usuario; 
+      console.log(registro_usuario);
       
       this.ServicioUsuarios.crearUsuario(registro_usuario).subscribe((res)=>{
 

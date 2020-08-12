@@ -20,14 +20,14 @@
         <li class="nav-item mx-1">
           <a type="button" class="btn btn-primary" routerLink="/inicio/perfil/{{ usuario }}" >Perfil</a>
         </li>
-        <li class="nav-item mx-1">
+        <!-- <li class="nav-item mx-1">
           <a type="button" class="btn btn-success" >Notificaciones</a>
+        </li> -->
+        <li  class="nav-item mx-1">
+          <button type="button" class="btn btn-warning" routerLink="/inicio/publicar">PUBLICAR</button>    
         </li>
         <li  class="nav-item mx-1">
-          <button type="button" class="btn btn-danger "(click)="cerrar_sesion()">Cerrar Sesion</button>    
-        </li>
-        <li  class="nav-item mx-1">
-          <button type="button" class="btn btn-danger "(click)="ver_usuario()">VER USUARIO</button>    
+          <button type="button" class="btn btn-danger" (click)="cerrar_sesion()">Cerrar Sesion</button>    
         </li>
         <!-- <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">            Dropdown on Right</a>

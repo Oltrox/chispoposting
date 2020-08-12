@@ -1,5 +1,29 @@
 <app-navegacion *ngIf="isLogged"></app-navegacion>
 
-<app-publicacion-detalle [publicacion]="publicacion"></app-publicacion-detalle>
+<div class="container">
+    <div class="row bg-info" style="height: 420px; margin-top: 3rem; ">
+        <div class="col">
+        </div>
+        <div class="col-6">
+            <div style="margin-top: 20%;">
+                <app-publicacion-detalle [publicacion]="publicacion"></app-publicacion-detalle>
+            </div>
+        </div>
+        <div class="col">
+        </div>        
+    </div>
+    <div class="row bg-light" style="margin-top: 1rem;">
+        <div class="col">
+        </div>
+        
+        <div class="col-6">
+            <app-publicacion-comentario *ngIf="isLogged" [comentarios]="comentarios"></app-publicacion-comentario>
+        </div>
 
-<app-publicacion-comentario *ngIf="isLogged" [comentarios]="comentarios"></app-publicacion-comentario>
+        <div class="col">
+        </div>        
+    </div>
+</div>
+
+
+
