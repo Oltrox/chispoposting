@@ -1,12 +1,53 @@
 import Usuario from '../models/Usuario';
 import Topico from '../models/Topico';
+import bcrypt, { compareSync } from 'bcrypt';
+import jwt from 'jwt-simple';
+import moment from 'moment';
 
 // correo tiene que ser unico
+const createToken = (user) => {
+    let payload = {
+        userId: user.id,
+        createdAt: moment().unix(),
+        expiresAt: moment().add(1, 'day').unix()
+    };
+    return jwt.encode(payload, "Token-de-pana");
+};
+
+export const checkToken = ( req, res, next ) => {
+    if (!req.headers['usario_token']) {
+        return res.json({
+            message: 'Debe incluir el token',
+            data:{}
+        });
+    };
+    const token = req.headers['usuario_token'];
+    let payload = null;
+    try {
+        payload = jwt.decode(token, "Token-de-pana");
+    } catch (error) {
+        return res.json({
+            message: 'Token invalido',
+            data: {}
+        });        
+    };
+    if (moment().unix() > payload.expiresAt) {
+        return res.json({
+            message: 'Token expirado'
+        });
+    };
+    req.id = payload.id;
+    next();
+};
+
 export async function createUsuario(req, res) {
     console.log(req.body);
-    var { id, password, correo, topico, f_nacimiento } = req.body;
+
     try {
-        
+
+        req.body.password = bcrypt.hashSync(req.body.password, 10);
+        var { id, password, correo, topico, f_nacimiento } = req.body;
+
         let newUsuario = await Usuario.create({
             id: id,
             password: password,
@@ -117,16 +158,16 @@ export async function deleteUsuario(req, res) {
 
             var usuario = await Usuario.update({
                 m_elimicacion: -1
-            },{
-                where:{
+            }, {
+                where: {
                     c_usuario: c_usuario
                 }
             });
         } else {
             var usuario = await Usuario.update({
                 m_elimicacion: 0
-            },{
-                where:{
+            }, {
+                where: {
                     c_usuario: c_usuario
                 }
             });
@@ -152,7 +193,7 @@ export async function updateUsuario(req, res) {
         const { id_usuario } = req.params;
 
         var { tipo, valor } = req.body;
-        if (Object.keys(req.body).length === 0){
+        if (Object.keys(req.body).length === 0) {
             res.json({
                 message: 'Json Vacio',
                 data: {}
@@ -162,19 +203,19 @@ export async function updateUsuario(req, res) {
         // validar que no fuera la misma contraseña
 
         // devolver las respuestas de los errores
-        
+
         var usuario = await Usuario.findOne({
             where: {
                 id: id_usuario
             }
         });
-        
-        if ( tipo == 1 ){
+
+        if (tipo == 1) {
+            
             var { c_antigua, c_nueva } = req.body.valor;
-            console.log(c_antigua);
-            console.log(usuario.password);
-            console.log(c_antigua.localeCompare(usuario.password));
-            if ( c_antigua.localeCompare(usuario.password) != 0 ) {
+            console.log(bcrypt.compareSync( c_antigua, usuario.password ));
+
+            if (!bcrypt.compareSync( c_antigua, usuario.password )) {
                 return res.json({
                     message: 'Contrasena incorrecta',
                     data: {}
@@ -183,15 +224,15 @@ export async function updateUsuario(req, res) {
                 return res.json({
                     message: 'La nueva contrasena es la misma que la antigua',
                     data: {}
-                }); 
+                });
             } else {
-                usuario.password = c_nueva;
+                usuario.password = bcrypt.hashSync(c_nueva, 10);
                 await usuario.save();
                 await usuario.reload();
             };
         };
 
-        if (tipo == 2){
+        if (tipo == 2) {
             var { valor } = req.body;
             console.log(valor);
             // verificar que el topico existe en la DB
@@ -202,11 +243,11 @@ export async function updateUsuario(req, res) {
                 }
             });
 
-            if ( topico.length > 0 ) {
+            if (topico.length > 0) {
                 return res.json({
                     message: 'El topico no existe'
                 });
-            } if ( valor == usuario.topico ) {
+            } if (valor == usuario.topico) {
                 return res.json({
                     message: 'El nuevo topico es el mismo que el antiguo',
                     data: {}
@@ -234,11 +275,42 @@ export async function updateUsuario(req, res) {
 };
 
 
-// Terminar de crear el login
-export async function testlogin(req, res) {
-    console.log(req.body);
 
-    res.json({
-        message: 'ok'
-    })
+// Terminar de crear el login
+export async function login(req, res) {
+    console.log(req.body);
+    try {
+        var { id, password } = req.body;
+        let usuario = await Usuario.findOne({
+            where: {
+                id: id
+            }
+        });
+        if (usuario === undefined) {
+            res.json({
+                message: 'Usuario no existe'
+            });
+        } else {
+            const equals = bcrypt.compareSync( password, usuario.password );
+            if (!equals) {
+                res.json({
+                    message: 'Contrasena incorrecta'
+                });
+            } else {
+                res.json({
+                    message: 'Correctamente logeado',
+                    data: createToken(usuario),
+                });
+            };
+        };
+        res.json({
+            message: 'ok'
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: 'Something goes wrong',
+            data: {}
+        });
+    };
 };
