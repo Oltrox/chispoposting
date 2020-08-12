@@ -7,7 +7,7 @@ import { createUsuario, getUsuarios, getUsuario, deleteUsuario, updateUsuario, t
 router.post('/', createUsuario);
 router.get('/', getUsuarios);
 router.get('/:id', getUsuario);
-router.delete('/:id', deleteUsuario);
+router.delete('/:c_usuario', deleteUsuario);
 router.put('/:id_usuario', updateUsuario);
 
 router.post('/login/', testlogin);

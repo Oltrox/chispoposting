@@ -27,7 +27,7 @@ const Usuario = sequelize.define('usuario', {
         type: Sequelize.CHAR(400)
     },
     topico: {
-        type: Sequelize.CHAR(16)
+        type: Sequelize.SMALLINT
     },
     f_nacimiento: {
         type: Sequelize.DATE

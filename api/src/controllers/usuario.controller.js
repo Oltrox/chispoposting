@@ -1,9 +1,12 @@
 import Usuario from '../models/Usuario';
+import Topico from '../models/Topico';
 
+// correo tiene que ser unico
 export async function createUsuario(req, res) {
     console.log(req.body);
     var { id, password, correo, topico, f_nacimiento } = req.body;
     try {
+        
         let newUsuario = await Usuario.create({
             id: id,
             password: password,
@@ -26,12 +29,19 @@ export async function createUsuario(req, res) {
             res.json({
                 message: 'Usuario created successfully',
                 data: newUsuario
-            })
+            });
         };
-    } catch (error) { //añadir error por usuario unico
-        if (error.errors[0].type == "unique violation"){
-            res.status(200).json({
+    } catch (error) {
+        console.log(error);
+        if (error.errors[0].message == "id must be unique") {
+            res.status(501).json({
                 message: 'ID used',
+                data: {}
+            });
+        };
+        if (error.errors[0].message == "correo must be unique") {
+            res.status(502).json({
+                message: 'Correo used',
                 data: {}
             });
         };
@@ -46,9 +56,11 @@ export async function getUsuarios(req, res) {
     console.log(req.body);
     try {
         var usuarios = await Usuario.findAll();
-        res.json({
-            data: usuarios
-        });
+        if (usuarios) {
+            res.json({
+                data: usuarios
+            });
+        };
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -70,9 +82,16 @@ export async function getUsuario(req, res) {
                 id: id
             }
         });
-        res.json({
-            data: usuario
-        });
+        if (usuario) {
+            res.json({
+                data: usuario
+            });
+        } else {
+            res.json({
+                message: 'Usuario no encontrado',
+                data: {}
+            });
+        };
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -80,21 +99,38 @@ export async function getUsuario(req, res) {
             data: {}
         });
     };
-    
+
 };
 
 //pasar de eliminar a modificar el estado del usuario
 // Actualizar base de datos para añadir estado 0: no eliminado - 1: eliminado
-
 export async function deleteUsuario(req, res) {
     console.log(req.body);
     try {
-        var { id } = req.params;
-        var usuario = await Usuario.destroy({
+        var { c_usuario } = req.params;
+        var usuario = await Usuario.findOne({
             where: {
-                id: id
+                c_usuario: c_usuario
             }
         });
+        if (usuario.m_elimicacion == 0) {
+
+            var usuario = await Usuario.update({
+                m_elimicacion: -1
+            },{
+                where:{
+                    c_usuario: c_usuario
+                }
+            });
+        } else {
+            var usuario = await Usuario.update({
+                m_elimicacion: 0
+            },{
+                where:{
+                    c_usuario: c_usuario
+                }
+            });
+        };
         if (usuario) {
             res.json({
                 data: usuario
@@ -114,18 +150,73 @@ export async function updateUsuario(req, res) {
     console.log(req.params);
     try {
         const { id_usuario } = req.params;
-        var { id, password, correo, topico, f_nacimiento } = req.body;
 
-        let usuario = await Usuario.update({
-            id: id,
-            password: password
-        },{
+        var { tipo, valor } = req.body;
+        if (Object.keys(req.body).length === 0){
+            res.json({
+                message: 'Json Vacio',
+                data: {}
+            });
+        };
+        // validar que sea la contraseña actual
+        // validar que no fuera la misma contraseña
+
+        // devolver las respuestas de los errores
+        
+        var usuario = await Usuario.findOne({
             where: {
-                id:id_usuario
-            },
-            returning: true,
-            plain: true
+                id: id_usuario
+            }
         });
+        
+        if ( tipo == 1 ){
+            var { c_antigua, c_nueva } = req.body.valor;
+            console.log(c_antigua);
+            console.log(usuario.password);
+            console.log(c_antigua.localeCompare(usuario.password));
+            if ( c_antigua.localeCompare(usuario.password) != 0 ) {
+                return res.status(501).json({
+                    message: 'Contrasena incorrecta',
+                    data: {}
+                });
+            } if (c_antigua == c_nueva) {
+                return res.status(502).json({
+                    message: 'La nueva contrasena es la misma que la antigua',
+                    data: {}
+                }); 
+            } else {
+                usuario.password = c_nueva;
+                await usuario.save();
+                await usuario.reload();
+            };
+        };
+
+        if (tipo == 2){
+            var { valor } = req.body;
+            console.log(valor);
+            // verificar que el topico existe en la DB
+
+            var topico = await Topico.findOne({
+                where: {
+                    topico: valor
+                }
+            });
+
+            if ( topico.length > 0 ) {
+                return res.status(503).json({
+                    message: 'El topico no existe'
+                });
+            } if ( valor.localeCompare(usuario.topico) == 0) {
+                return res.status(504).json({
+                    message: 'El nuevo topico es el mismo que el antiguo',
+                    data: {}
+                });
+            } else {
+                usuario.topico = topico.c_topico;
+                await usuario.save();
+                await usuario.reload();
+            }
+        };
 
         if (usuario) {
             res.json({
@@ -142,6 +233,8 @@ export async function updateUsuario(req, res) {
     };
 };
 
+
+// Terminar de crear el login
 export async function testlogin(req, res) {
     console.log(req.body);
 

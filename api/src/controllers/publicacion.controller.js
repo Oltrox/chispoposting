@@ -2,6 +2,8 @@ import Publicacion from '../models/Publicacion';
 const { QueryTypes } = require('sequelize');
 import { sequelize } from '../database/database';
 
+// paginar publicaciones
+
 export async function createPublicacion( req, res ) {
     console.log(req.body);
     var { c_usuario, link, titulo, descripcion } = req.body;
@@ -64,14 +66,14 @@ export async function getPublicacion( req, res ) {
             where:{
                 c_publicacion: c_publicacion,
                 visible: 0,
-                eleminado: 0,
+                eliminado: 0,
             }
         });
         res.json({
             data: publicacion
         });
     } catch (error) {
-        console.json(error);
+        console.log(error);
         res.status(500).json({
             message: 'something goes wrong',
             data: {}
@@ -83,9 +85,9 @@ export async function getPublicacionesTopico ( req, res ) {
     console.log(req.params);
     try {
         var { topico } = req.params;
-
+        
         var publicaciones = await sequelize.query(
-            'SELECT * FROM publicacion WHERE c_usuario IN (SELECT c_usuario FROM usuario WHERE topico = $topico);',
+            'SELECT * FROM publicacion WHERE c_usuario IN (SELECT c_usuario FROM usuario WHERE topico = (SELECT c_topico FROM topico WHERE topico = $topico));',
             {
                 bind: { topico: topico },
                 type: QueryTypes.SELECT
@@ -93,6 +95,54 @@ export async function getPublicacionesTopico ( req, res ) {
         );
         res.json({
             data:publicaciones
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: 'something goes wrong',
+            data: {}
+        });
+    };
+};
+
+export async function getPublicacionesPropias( req, res ) {
+    console.log(req.body);
+    try {
+        var { id } = req.params;
+
+        var publicaciones = await sequelize.query(
+            'SELECT * FROM publicacion WHERE c_usuario IN (SELECT c_usuario FROM usuario WHERE id = $id);',
+            {
+                bind: { id: id },
+                type: QueryTypes.SELECT
+            }
+        );
+        res.json({
+            data: publicaciones
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: 'something goes wrong',
+            data: {}
+        });
+    };
+};
+
+export async function getPublicacionesUsuario( req, res ) {
+    console.log(req.body);
+    try {
+        var { id } = req.params;
+
+        var publicaciones = await sequelize.query(
+            'SELECT * FROM publicacion WHERE c_usuario IN (SELECT c_usuario FROM usuario WHERE id = $id) AND visible = 0 AND eliminado = 0;',
+            {
+                bind: { id: id },
+                type: QueryTypes.SELECT
+            }
+        );
+        res.json({
+            data: publicaciones
         });
     } catch (error) {
         console.log(error);
