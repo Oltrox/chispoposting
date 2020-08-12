@@ -3,20 +3,31 @@
       <img src="https://i.ibb.co/Rb7vp1L/logo.png" width="150" height="60"> 
     </a>
   
-    <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarEnc" aria-controls="navbarEnc" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" (click)="navbarCollapsed = !navbarCollapsed" [attr.aria-expanded]="!navbarCollapsed" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
-    </button> -->
+    </button>
 
-    <div class="collapse navbar-collapse" id="navbarEnc">
+    <div class="collapse navbar-collapse" [ngbCollapse]="navbarCollapsed" id="navbarEncabezado">
       <ul class="navbar-nav ml-auto">
+        
         <li class="nav-item mx-1">
-          <button type="button" class="btn btn-primary ">Perfil</button>
+          <a type="button" class="btn btn-primary" >{{ this.ServicioUsuarios.usuarioActivo.id }}</a>
+        </li>
+
+        <li class="nav-item mx-1">
+          <a type="button" class="btn btn-primary" routerLink="/inicio/publicaciones" >Publicaciones</a>
         </li>
         <li class="nav-item mx-1">
-          <button type="button" class="btn btn-success ">Notificaciones</button>
+          <a type="button" class="btn btn-primary" routerLink="/inicio/perfil/{{ usuario }}" >Perfil</a>
+        </li>
+        <li class="nav-item mx-1">
+          <a type="button" class="btn btn-success" >Notificaciones</a>
         </li>
         <li  class="nav-item mx-1">
-          <button type="button" class="btn btn-danger " (click)="cerrar_sesion()">Cerrar Sesion</button>    
+          <button type="button" class="btn btn-danger "(click)="cerrar_sesion()">Cerrar Sesion</button>    
+        </li>
+        <li  class="nav-item mx-1">
+          <button type="button" class="btn btn-danger "(click)="ver_usuario()">VER USUARIO</button>    
         </li>
         <!-- <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">            Dropdown on Right</a>

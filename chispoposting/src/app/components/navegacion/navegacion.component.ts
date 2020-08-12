@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AutenticacionService } from 'src/app/shared/services/autenticacion.service';
 import { Router } from '@angular/router';
+import { UsuariosService } from 'src/app/shared/services/usuarios.service';
+import { Usuario } from 'src/app/shared/models/usuario';
 
 @Component({
   selector: 'app-navegacion',
@@ -9,16 +10,28 @@ import { Router } from '@angular/router';
 })
 export class NavegacionComponent implements OnInit {
 
+  usuario: string;
+  public navbarCollapsed = true;
+
   constructor(
-    private ServicioAutenticacion: AutenticacionService,
-    private router:Router) { }
+    public ServicioUsuarios: UsuariosService,
+    private router:Router 
+  ) { }
 
   ngOnInit(): void {
+    this.usuario = localStorage.getItem("usuario");
   }
 
   cerrar_sesion(){
-    this.ServicioAutenticacion.cerrarSesion();
+    this.ServicioUsuarios.cerrarSesion();
     this.router.navigate(["auth"]);
   }
+
+
+  ver_usuario(){
+    console.log(this.ServicioUsuarios.usuarioActivo);
+  }
+
+
 
 }

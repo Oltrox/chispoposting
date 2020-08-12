@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { PublicacionesService } from 'src/app/shared/services/publicaciones.service';
 import { Publicacion } from 'src/app/shared/models/publicacion';
-import { AutenticacionService } from 'src/app/shared/services/autenticacion.service';
+import { UsuariosService } from 'src/app/shared/services/usuarios.service';
+import { Usuario } from 'src/app/shared/models/usuario';
 
 @Component({
   selector: 'app-inicio',
@@ -10,18 +11,17 @@ import { AutenticacionService } from 'src/app/shared/services/autenticacion.serv
 })
 export class InicioComponent implements OnInit {
 
-  publicaciones: Array<Publicacion> = new Array<Publicacion>();
-
   constructor(
-    private ServicioPublicaciones: PublicacionesService
-  ) { }
+    private ServicioUsuarios: UsuariosService
+  ) { 
+    
+    this.ServicioUsuarios.verUsuario({ id:localStorage.getItem("usuario") } as Usuario).subscribe((res)=>{
+      this.ServicioUsuarios.usuarioActivo = res.data as Usuario;
+    });
+
+  }
 
   ngOnInit(): void {
-
-    this.ServicioPublicaciones.leerPosts().subscribe((publicaciones_recibidas)=>{
-      this.publicaciones = publicaciones_recibidas;
-      console.log(this.publicaciones);
-    });
 
   }
 

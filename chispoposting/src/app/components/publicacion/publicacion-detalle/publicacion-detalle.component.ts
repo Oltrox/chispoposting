@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Publicacion } from 'src/app/shared/models/publicacion';
 
 @Component({
   selector: 'app-publicacion-detalle',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PublicacionDetalleComponent implements OnInit {
 
+  @Input() publicacion: Publicacion = new Publicacion();
+  
   constructor() { }
 
   ngOnInit(): void {
+
   }
 
 }

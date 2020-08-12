@@ -1,0 +1,5 @@
+<app-navegacion *ngIf="isLogged"></app-navegacion>
+
+<app-publicacion-detalle [publicacion]="publicacion"></app-publicacion-detalle>
+
+<app-publicacion-comentario *ngIf="isLogged" [comentarios]="comentarios"></app-publicacion-comentario>

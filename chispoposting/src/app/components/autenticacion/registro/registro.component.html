@@ -37,10 +37,15 @@
   <br>
 
 
+  <div class="form-check">
+    <input type ="checkbox" class="form-check-input" id="terminos" (change)="isAccepted = !isAccepted" autocomplete="off"> 
+    <label class="form-check-label unselectable" for="terminos"> He leido y acepto los terminos de la plataforma</label>    
+  </div>
+  <div *ngIf="isSubmitted && !isAccepted" class="alert alert-danger">  
+    <div>Debes aceptar los acuerdos</div>  
+  </div>
+  <br>
+
   <input type= "submit" value= "Registrar" class= "btn btn-primary" >
-
-
   
 </form> 
-
-<button (click)="mostrarusuarios()">Mostrar usuarios</button>

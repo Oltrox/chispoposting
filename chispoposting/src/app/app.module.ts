@@ -9,12 +9,20 @@ import { AppComponent } from './app.component';
 import { AutenticacionComponent } from './components/autenticacion/autenticacion.component';
 import { LoginComponent } from './components/autenticacion/login/login.component';
 import { RegistroComponent } from './components/autenticacion/registro/registro.component';
-import { PublicacionDetalleComponent } from './components/inicio/publicacion-detalle/publicacion-detalle.component';
 import { InicioComponent } from './components/inicio/inicio.component';
 import { NavegacionComponent } from './components/navegacion/navegacion.component';
+import { PerfilComponent } from './components/inicio/perfil/perfil.component';
+import { NotificacionesComponent } from './components/inicio/notificaciones/notificaciones.component';
+import { CarruselComponent } from './components/inicio/carrusel/carrusel.component';
+import { PublicacionComponent } from './components/publicacion/publicacion.component';
+import { PublicacionComentarioComponent } from './components/publicacion/publicacion-comentario/publicacion-comentario.component';
+import { PublicacionDetalleComponent } from './components/publicacion/publicacion-detalle/publicacion-detalle.component';
 
-import { AutenticacionService } from './shared/services/autenticacion.service';
 import { PublicacionesService } from './shared/services/publicaciones.service';
+import { UsuariosService } from './shared/services/usuarios.service';
+import { ComentariosService } from './shared/services/comentarios.service';
+
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -24,17 +32,24 @@ import { PublicacionesService } from './shared/services/publicaciones.service';
     RegistroComponent,
     PublicacionDetalleComponent,
     InicioComponent,
-    NavegacionComponent
+    NavegacionComponent,
+    PerfilComponent,
+    NotificacionesComponent,
+    CarruselComponent,
+    PublicacionComponent,
+    PublicacionComentarioComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgbModule
   ],
   providers: [
-    AutenticacionService,
-    PublicacionesService
+    PublicacionesService,
+    UsuariosService,
+    ComentariosService
   ],
   bootstrap: [AppComponent]
 })

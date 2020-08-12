@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AutenticacionService } from 'src/app/shared/services/autenticacion.service';
 import { Usuario } from 'src/app/shared/models/usuario';
 import { Router } from '@angular/router';
+import { UsuariosService } from 'src/app/shared/services/usuarios.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private ServicioAutenticacion: AutenticacionService,
+    private ServicioUsuarios: UsuariosService,
     private router: Router
   ) { }
 
@@ -46,11 +46,14 @@ export class LoginComponent implements OnInit {
     var login_usuario:Usuario = this.formularioLogin.value as Usuario;
 
     if (this.formularioLogin.valid){
-      this.ServicioAutenticacion.login(login_usuario).subscribe((res)=>{
+      this.ServicioUsuarios.login(login_usuario).subscribe((res)=>{
 
         if(res.message == "ok"){
-          this.ServicioAutenticacion.crearSesion(login_usuario.id);
+
+          this.ServicioUsuarios.crearSesion(login_usuario.id);
+
           this.router.navigate(["inicio"]);
+
         }
 
       })
