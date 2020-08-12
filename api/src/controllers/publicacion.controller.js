@@ -1,10 +1,11 @@
 import Publicacion from '../models/Publicacion';
-const { QueryTypes } = require('sequelize');
+const { QueryTypes, where } = require('sequelize');
 import { sequelize } from '../database/database';
+import Usuario from '../models/Usuario';
 
 // paginar publicaciones
 
-export async function createPublicacion( req, res ) {
+export async function createPublicacion(req, res) {
     console.log(req.body);
     var { c_usuario, link, titulo, descripcion } = req.body;
     try {
@@ -26,26 +27,46 @@ export async function createPublicacion( req, res ) {
                 data: newPublicacion
             });
         };
-        
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
             message: 'Something goes wrong',
             data: {}
-        });        
+        });
     };
 };
 
-export async function getPublicaciones( req, res ) {
+export async function getPublicaciones(req, res) {
     console.log("########################33");
     console.log(req.body);
     try {
+        
         var publicaciones = await Publicacion.findAll({
-            where:{
+            where: {
                 visible: 0,
-                eliminado: 0,
+                eliminado: 0                
             }
         });
+        
+        /*
+        usuarios.forEach(async usuario => {
+            await Publicacion.findAll({
+                where: {
+                    c_usuario: usuario.c_usuario
+                }
+            }, function (err, publicaciones) {
+                usuariosPublicaciones.push({
+                    usuario: usuario.dataValues,
+                    publicaciones: publicaciones
+                });
+            }).then(function (publicaciones) {
+                console.log("###########asdasd#### 88888")
+
+            });
+        })
+        ;
+        */
         res.json({
             data: publicaciones
         });
@@ -58,12 +79,12 @@ export async function getPublicaciones( req, res ) {
     };
 };
 
-export async function getPublicacion( req, res ) {
+export async function getPublicacion(req, res) {
     console.log(req.body);
     try {
         var { c_publicacion } = req.params;
         var publicacion = await Publicacion.findOne({
-            where:{
+            where: {
                 c_publicacion: c_publicacion,
                 visible: 0,
                 eliminado: 0,
@@ -81,11 +102,11 @@ export async function getPublicacion( req, res ) {
     };
 };
 
-export async function getPublicacionesTopico ( req, res ) {
+export async function getPublicacionesTopico(req, res) {
     console.log(req.params);
     try {
         var { topico } = req.params;
-        
+
         var publicaciones = await sequelize.query(
             'SELECT * FROM publicacion WHERE c_usuario IN (SELECT c_usuario FROM usuario WHERE topico = (SELECT c_topico FROM topico WHERE topico = $topico));',
             {
@@ -94,7 +115,7 @@ export async function getPublicacionesTopico ( req, res ) {
             }
         );
         res.json({
-            data:publicaciones
+            data: publicaciones
         });
     } catch (error) {
         console.log(error);
@@ -105,7 +126,7 @@ export async function getPublicacionesTopico ( req, res ) {
     };
 };
 
-export async function getPublicacionesPropias( req, res ) {
+export async function getPublicacionesPropias(req, res) {
     console.log(req.body);
     try {
         var { id } = req.params;
@@ -129,7 +150,7 @@ export async function getPublicacionesPropias( req, res ) {
     };
 };
 
-export async function getPublicacionesUsuario( req, res ) {
+export async function getPublicacionesUsuario(req, res) {
     console.log(req.body);
     try {
         var { id } = req.params;
@@ -153,13 +174,13 @@ export async function getPublicacionesUsuario( req, res ) {
     };
 };
 
-export async function invisiblePublicacion (req, res) {
+export async function invisiblePublicacion(req, res) {
     console.log(req.params);
     try {
         var { c_publicacion } = req.params;
         var publicacion = await Publicacion.update({
             visible: 1
-        },{
+        }, {
             where: {
                 c_publicacion: c_publicacion
             },
@@ -167,7 +188,7 @@ export async function invisiblePublicacion (req, res) {
             plain: true
         });
         res.json({
-            data:publicacion
+            data: publicacion
         });
     } catch (error) {
         console.log(error);
@@ -178,13 +199,13 @@ export async function invisiblePublicacion (req, res) {
     };
 };
 
-export async function deletePublicacion (req, res) {
+export async function deletePublicacion(req, res) {
     console.log(req.params);
     try {
         var { c_publicacion } = req.params;
         var publicacion = await Publicacion.update({
             eliminado: 1
-        },{
+        }, {
             where: {
                 c_publicacion: c_publicacion
             },
@@ -192,7 +213,7 @@ export async function deletePublicacion (req, res) {
             plain: true
         });
         res.json({
-            data:publicacion
+            data: publicacion
         });
     } catch (error) {
         console.log(error);
@@ -203,7 +224,7 @@ export async function deletePublicacion (req, res) {
     };
 };
 
-export async function updatePublicacion ( req, res ) {
+export async function updatePublicacion(req, res) {
     console.log(req.params);
     try {
         var { c_publicacion } = req.params;
@@ -211,7 +232,7 @@ export async function updatePublicacion ( req, res ) {
         var publicacion = await Publicacion.update({
             titulo: titulo,
             descripcion: descripcion
-        },{
+        }, {
             where: {
                 c_publicacion: c_publicacion
             },

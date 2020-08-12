@@ -32,7 +32,7 @@ export async function createUsuario(req, res) {
             });
         };
     } catch (error) {
-        console.log(error);
+        //console.log(error);
         if (error.errors[0].message == "id must be unique") {
             res.status(501).json({
                 message: 'ID used',
@@ -175,12 +175,12 @@ export async function updateUsuario(req, res) {
             console.log(usuario.password);
             console.log(c_antigua.localeCompare(usuario.password));
             if ( c_antigua.localeCompare(usuario.password) != 0 ) {
-                return res.status(501).json({
+                return res.json({
                     message: 'Contrasena incorrecta',
                     data: {}
                 });
             } if (c_antigua == c_nueva) {
-                return res.status(502).json({
+                return res.json({
                     message: 'La nueva contrasena es la misma que la antigua',
                     data: {}
                 }); 
@@ -198,16 +198,16 @@ export async function updateUsuario(req, res) {
 
             var topico = await Topico.findOne({
                 where: {
-                    topico: valor
+                    c_topico: valor
                 }
             });
 
             if ( topico.length > 0 ) {
-                return res.status(503).json({
+                return res.json({
                     message: 'El topico no existe'
                 });
-            } if ( valor.localeCompare(usuario.topico) == 0) {
-                return res.status(504).json({
+            } if ( valor == usuario.topico ) {
+                return res.json({
                     message: 'El nuevo topico es el mismo que el antiguo',
                     data: {}
                 });
