@@ -13,6 +13,9 @@ import { AgregarPublicacionComponent } from 'src/app/components/publicacion/agre
 
 const routes: Routes = [
   {
+    path: '', redirectTo: 'auth', pathMatch: 'full'
+  },
+  {
     path: 'auth', component: AutenticacionComponent
   },
   {
