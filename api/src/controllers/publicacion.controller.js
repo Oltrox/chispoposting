@@ -38,45 +38,46 @@ export async function createPublicacion(req, res) {
 };
 
 export async function getPublicaciones(req, res) {
-    console.log("########################33");
-    console.log(req.body);
-    try {
-        
-        var publicaciones = await Publicacion.findAll({
-            where: {
-                visible: 0,
-                eliminado: 0                
-            }
-        });
-        
-        /*
-        usuarios.forEach(async usuario => {
-            await Publicacion.findAll({
-                where: {
-                    c_usuario: usuario.c_usuario
-                }
-            }, function (err, publicaciones) {
-                usuariosPublicaciones.push({
-                    usuario: usuario.dataValues,
-                    publicaciones: publicaciones
-                });
-            }).then(function (publicaciones) {
-                console.log("###########asdasd#### 88888")
 
-            });
+    var  publicacionesUsuarios = [], publicaciones
+    await Publicacion.findAll({
+        where: {
+            visible: 0,
+            eliminado: 0                
+        }
+    }).then( data =>{
+        publicaciones = data;
+        var promesas = [];
+
+        for (let i = 0; i < publicaciones.length; i++){
+            promesas.push(Usuario.findOne({
+                where: {
+                    c_usuario: publicaciones[i].c_usuario
+                }
+            }));
+        }
+
+        return Promise.all(promesas);
+    }).then(result => {
+
+        publicacionesUsuarios = publicaciones.map((elem, index)=>{
+            let objeto = elem.get({plain:true});
+            objeto.usuario = result[index].dataValues;
+            return objeto;
         })
-        ;
-        */
-        res.json({
-            data: publicaciones
+
+        console.log(publicacionesUsuarios);
+        return res.json({
+            data: publicacionesUsuarios
         });
-    } catch (error) {
+    }).catch(error => {
         console.log(error);
         res.status(500).json({
             message: 'something goes wrong',
             data: {}
         });
-    };
+    });
+
 };
 
 export async function getPublicacion(req, res) {

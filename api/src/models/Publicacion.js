@@ -36,6 +36,9 @@ const Publicacion = sequelize.define('publicacion', {
     },
     eliminado: {
         type: Sequelize.SMALLINT
+    },
+    usuario: {
+        type: Sequelize.VIRTUAL
     }
 },{
     timestamps: false,
