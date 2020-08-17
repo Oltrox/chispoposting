@@ -1,5 +1,5 @@
 import Publicacion from '../models/Publicacion';
-const { QueryTypes, where } = require('sequelize');
+const { QueryTypes, where, col } = require('sequelize');
 import { sequelize } from '../database/database';
 import Usuario from '../models/Usuario';
 
@@ -39,17 +39,18 @@ export async function createPublicacion(req, res) {
 
 export async function getPublicaciones(req, res) {
 
-    var  publicacionesUsuarios = [], publicaciones
+    var publicacionesUsuarios = [], publicaciones
+
     await Publicacion.findAll({
         where: {
             visible: 0,
-            eliminado: 0                
+            eliminado: 0
         }
-    }).then( data =>{
+    }).then(data => {
         publicaciones = data;
         var promesas = [];
 
-        for (let i = 0; i < publicaciones.length; i++){
+        for (let i = 0; i < publicaciones.length; i++) {
             promesas.push(Usuario.findOne({
                 where: {
                     c_usuario: publicaciones[i].c_usuario
@@ -60,13 +61,13 @@ export async function getPublicaciones(req, res) {
         return Promise.all(promesas);
     }).then(result => {
 
-        publicacionesUsuarios = publicaciones.map((elem, index)=>{
-            let objeto = elem.get({plain:true});
+        publicacionesUsuarios = publicaciones.map((elem, index) => {
+            let objeto = elem.get({ plain: true });
             objeto.usuario = result[index].dataValues;
             return objeto;
-        })
+        });
 
-        console.log(publicacionesUsuarios);
+        // console.log(publicacionesUsuarios);
         return res.json({
             data: publicacionesUsuarios
         });
@@ -77,9 +78,81 @@ export async function getPublicaciones(req, res) {
             data: {}
         });
     });
-
 };
 
+export async function getPublicacionesUsuarios(req, res) {
+
+    var publicacionesUsuarios = [], publicaciones
+    await Usuario.findAll({
+        where: {
+            estado: 0
+        }
+    }).then((usuarios) => {
+        console.log("#####################Correcta");
+        console.log(usuarios);
+        var promesas = [];
+        for (let i = 0; i < usuarios.length; i++) {
+            promesas.push(
+                Publicacion.findAll({
+                    where: {
+                        c_usuario: usuarios[i].c_usuario
+                    }
+                })
+            );
+        };
+
+        return Promise.all(promesas);
+    }).then((publicaciones) => {
+        /*
+        for (let j = 0; j < usuarios.length; j++) {
+            console.log(usuarios);
+        };
+        */
+
+        for (let i = 0; i < publicaciones.length; i++) {
+            if (publicaciones[i].length > 0) {
+                console.log("#####################Correcta");
+                console.log(publicaciones[i]);
+
+          
+            }
+        };
+    }).then(() => {
+        res.json({
+            message: 'publicaciones obtenidas',
+            data: { publicacionesUsuarios }
+        });
+    }).catch(error => {
+        console.log(error);
+        res.status(500).json({
+            message: 'something goes wrong',
+            data: { perro: 'perro' }
+        });
+    });
+};
+
+/*
+        .then((publicacionUsuario) => {
+            console.log("#####################Correcta");
+            console.log(i);
+            console.log(usuarios[i]);
+            console.log(publicacionUsuario);
+            publicacionesUsuarios.push({
+                usuarios: usuarios[i],
+                publicaciones: publicacionUsuario
+            });
+        })
+            );
+};
+Promise.all(promesas);
+console.log(publicacionesUsuarios);
+;
+    
+});
+};
+*/
+
+// Retornar 
 export async function getPublicacion(req, res) {
     console.log(req.body);
     try {
@@ -104,6 +177,7 @@ export async function getPublicacion(req, res) {
 };
 
 export async function getPublicacionesTopico(req, res) {
+
     console.log(req.params);
     try {
         var { topico } = req.params;
@@ -128,6 +202,7 @@ export async function getPublicacionesTopico(req, res) {
 };
 
 export async function getPublicacionesPropias(req, res) {
+
     console.log(req.body);
     try {
         var { id } = req.params;
@@ -152,6 +227,7 @@ export async function getPublicacionesPropias(req, res) {
 };
 
 export async function getPublicacionesUsuario(req, res) {
+
     console.log(req.body);
     try {
         var { id } = req.params;

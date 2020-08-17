@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS usuario (
     m_castigo SMALLINT,
     m_elimicacion SMALLINT,
     estado SMALLINT,
+    token VARCHAR(256),
     CONSTRAINT fk_topico
         FOREIGN KEY(topico)
             REFERENCES topico(c_topico),

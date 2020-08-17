@@ -55,6 +55,9 @@ const Usuario = sequelize.define('usuario', {
     },
     estado: {
         type: Sequelize.SMALLINT
+    },
+    token: {
+        type: Sequelize.CHAR(256)
     }
 },{
     timestamps: false,

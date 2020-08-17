@@ -12,6 +12,4 @@ router.get('/', getComentarios);
 router.delete('/:c_comentario', deleteComentario);
 router.put('/:c_comentario', updateComentario);
 
-
-
 export default router;

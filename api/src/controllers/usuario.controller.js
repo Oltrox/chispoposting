@@ -3,42 +3,71 @@ import Topico from '../models/Topico';
 import bcrypt, { compareSync } from 'bcrypt';
 import jwt from 'jwt-simple';
 import moment from 'moment';
+import { sequelize } from '../database/database';
+import { token } from 'morgan';
+import e from 'cors';
 
+
+//aplicar lowercast
 // correo tiene que ser unico
-const createToken = (user) => {
+
+// Funciones utiles
+const createToken = (id) => {
     let payload = {
-        userId: user.id,
+        userId: id,
         createdAt: moment().unix(),
         expiresAt: moment().add(1, 'day').unix()
     };
     return jwt.encode(payload, "Token-de-pana");
 };
 
-export const checkToken = ( req, res, next ) => {
-    if (!req.headers['usario_token']) {
+export async function checkToken(req, res, next) {
+    if (!req.headers['usuario_token']) {
         return res.json({
             message: 'Debe incluir el token',
-            data:{}
+            data: {}
         });
     };
     const token = req.headers['usuario_token'];
     let payload = null;
     try {
         payload = jwt.decode(token, "Token-de-pana");
+        if (moment().unix() > payload.expiresAt) {
+            return res.json({
+                message: 'Token expirado'
+            });
+        };
+        let usuario = await Usuario.findOne({
+            where: {
+                id: payload.userId
+            }
+        });
+        if (usuario) {
+            console.log(token);
+            console.log(usuario.token);
+            console.log(usuario.token.localeCompare(token));
+
+            if (usuario.token.localeCompare(token) == 0) {
+                console.log("##########Token valido###############");
+
+                req.id = payload.id;
+                next();
+            } else {
+                return res.json({
+                    message: 'Token invalido'
+                });
+            };
+        };
     } catch (error) {
+        console.log(error);
         return res.json({
             message: 'Token invalido',
             data: {}
-        });        
-    };
-    if (moment().unix() > payload.expiresAt) {
-        return res.json({
-            message: 'Token expirado'
         });
     };
-    req.id = payload.id;
-    next();
 };
+
+// Funciones de la api
 
 export async function createUsuario(req, res) {
     console.log(req.body);
@@ -47,6 +76,21 @@ export async function createUsuario(req, res) {
 
         req.body.password = bcrypt.hashSync(req.body.password, 10);
         var { id, password, correo, topico, f_nacimiento } = req.body;
+
+        /*
+        let usuario = Usuarios.findOne({
+            where: {
+                [Op.or]: [
+                    {
+                        id: id.toLowerCase()
+                    },
+                    {
+                        correo: correo.toLowerCase()
+                    }
+                ]
+            }
+        });
+        */
 
         let newUsuario = await Usuario.create({
             id: id,
@@ -64,12 +108,16 @@ export async function createUsuario(req, res) {
             n_publicaciones: 0,
             m_castigo: 0,
             m_elimicacion: 0,
-            estado: 0
+            estado: 0,
+            token: createToken(id)
         });
+
         if (newUsuario) {
+            newUsuario.password = undefined;
             res.json({
                 message: 'Usuario created successfully',
-                data: newUsuario
+                data: newUsuario,
+                token: newUsuario.token
             });
         };
     } catch (error) {
@@ -98,6 +146,9 @@ export async function getUsuarios(req, res) {
     try {
         var usuarios = await Usuario.findAll();
         if (usuarios) {
+            usuarios.forEach(usuario => {
+                usuario.password = undefined;
+            });
             res.json({
                 data: usuarios
             });
@@ -119,11 +170,13 @@ export async function getUsuario(req, res) {
     try {
         var { id } = req.params;
         var usuario = await Usuario.findOne({
-            where: {
-                id: id
-            }
+            where: sequelize.where(
+                sequelize.fn('lower', sequelize.col('id')),
+                sequelize.fn('lower', id.toLowerCase())
+            )
         });
         if (usuario) {
+            usuario.password = undefined;
             res.json({
                 data: usuario
             });
@@ -150,9 +203,10 @@ export async function deleteUsuario(req, res) {
     try {
         var { c_usuario } = req.params;
         var usuario = await Usuario.findOne({
-            where: {
-                c_usuario: c_usuario
-            }
+            where: sequelize.where(
+                sequelize.fn('lower', sequelize.col('id')),
+                sequelize.fn('lower', id.toLowerCase())
+            )
         });
         if (usuario.m_elimicacion == 0) {
 
@@ -192,35 +246,36 @@ export async function updateUsuario(req, res) {
     try {
         const { id_usuario } = req.params;
 
-        var { tipo, valor } = req.body;
         if (Object.keys(req.body).length === 0) {
             res.json({
                 message: 'Json Vacio',
                 data: {}
             });
         };
+        var { tipo, valor } = req.body;
         // validar que sea la contraseña actual
         // validar que no fuera la misma contraseña
 
         // devolver las respuestas de los errores
 
         var usuario = await Usuario.findOne({
-            where: {
-                id: id_usuario
-            }
+            where: sequelize.where(
+                sequelize.fn('lower', sequelize.col('id')),
+                sequelize.fn('lower', id_usuario.toLowerCase())
+            )
         });
 
         if (tipo == 1) {
-            
-            var { c_antigua, c_nueva } = req.body.valor;
-            console.log(bcrypt.compareSync( c_antigua, usuario.password ));
 
-            if (!bcrypt.compareSync( c_antigua, usuario.password )) {
+            var { c_antigua, c_nueva } = req.body.valor;
+            console.log(bcrypt.compareSync(c_antigua, usuario.password));
+
+            if (!bcrypt.compareSync(c_antigua, usuario.password)) {
                 return res.json({
                     message: 'Contrasena incorrecta',
                     data: {}
                 });
-            } if (c_antigua == c_nueva) {
+            } if (!bcrypt.compareSync(c_nueva, usuario.password)) {
                 return res.json({
                     message: 'La nueva contrasena es la misma que la antigua',
                     data: {}
@@ -274,43 +329,75 @@ export async function updateUsuario(req, res) {
     };
 };
 
-
-
-// Terminar de crear el login
 export async function login(req, res) {
     console.log(req.body);
-    try {
-        var { id, password } = req.body;
-        let usuario = await Usuario.findOne({
-            where: {
-                id: id
-            }
-        });
+
+    var { id, password } = req.body;
+
+    await Usuario.findOne({
+        where: sequelize.where(
+            sequelize.fn('lower', sequelize.col('id')),
+            sequelize.fn('lower', id.toLowerCase())
+        )
+    }).then(async (usuario) => {
+        console.log(usuario);
         if (usuario === undefined) {
             res.json({
                 message: 'Usuario no existe'
             });
         } else {
-            const equals = bcrypt.compareSync( password, usuario.password );
+            const equals = bcrypt.compareSync(password, usuario.password);
             if (!equals) {
                 res.json({
                     message: 'Contrasena incorrecta'
                 });
             } else {
-                res.json({
-                    message: 'Correctamente logeado',
-                    data: createToken(usuario),
+                usuario.token = createToken(usuario.id);
+                await usuario.save();
+                await usuario.reload().then(() => {
+                    res.json({
+                        message: 'Correctamente logeado',
+                        token: usuario.token
+                    });
                 });
             };
         };
-        res.json({
-            message: 'ok'
-        })
-    } catch (error) {
+    }).catch((error) => {
         console.log(error);
         res.status(500).json({
             message: 'Something goes wrong',
             data: {}
         });
-    };
+    });
+};
+
+export async function logout(req, res) {
+    console.log(req.body);
+    try {
+        var { id } = req.body;
+
+        let usuario = await Usuario.findOne({
+            where: sequelize.where(
+                sequelize.fn('lower', sequelize.col('id')),
+                sequelize.fn('lower', id.toLowerCase())
+            )
+        });
+
+        if (usuario) {
+            usuario.token = null;
+            await usuario.save();
+            await usuario.reload().then(() => {
+                res.json({
+                    message: 'logout exitoso',
+                    data: {}
+                });
+            });
+        };
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: 'Somethin goes wrong',
+            data: {}
+        });
+    }
 };

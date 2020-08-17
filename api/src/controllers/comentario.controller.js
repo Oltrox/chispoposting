@@ -1,5 +1,6 @@
 import Comentario from '../models/Comentario';
 
+// 
 export async function createComentario ( req, res ) {
     console.log("########################33");
     console.log(req.body);
