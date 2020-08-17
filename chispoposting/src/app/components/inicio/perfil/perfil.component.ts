@@ -1,9 +1,8 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { UsuariosService } from 'src/app/shared/services/usuarios.service';
 import { PublicacionesService } from 'src/app/shared/services/publicaciones.service';
 import { Publicacion } from 'src/app/shared/models/publicacion';
-import { Router, RouterLinkActive, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Usuario } from 'src/app/shared/models/usuario';
 
 @Component({
@@ -13,9 +12,7 @@ import { Usuario } from 'src/app/shared/models/usuario';
 })
 export class PerfilComponent implements OnInit {
 
-  publicacionesUsuario: Array<Publicacion> = new Array<Publicacion>();
-  usuario: Usuario = new Usuario();
-  paramRuta: string;
+  @Input() isLoadedUsuario: Boolean = new Boolean();
 
   isLoadedPublicaciones = false;
   isLoadedUsuarioForaneo = false;
@@ -23,20 +20,26 @@ export class PerfilComponent implements OnInit {
   isForeign = true;
   isUser = false;
 
+  publicacionesUsuario: Array<Publicacion> = new Array<Publicacion>();
+  usuario: Usuario = new Usuario();
+  paramRuta: string;
+
   sub;
 
   constructor(
-    private formBuilder: FormBuilder,
     public ServicioUsuario: UsuariosService,
     private ServicioPublicaciones: PublicacionesService,
     private router: Router,
     private rutaActiva: ActivatedRoute
   ) { 
+    console.log("reconstructed perfil");
 
     this.sub = this.rutaActiva.paramMap.subscribe(params => { 
 
-      this.isForeign = true;
-      this.isUser = false;
+      this.isForeign = true; // Usuario foraneo
+      this.isUser = false; // Usuario encontrado
+      this.isLoadedPublicaciones = false; // Publicaciones cargadas
+      this.isLoadedUsuarioForaneo = false; // Usuario foraneo cargado
       
       this.paramRuta = params.get('id'); 
       
@@ -57,14 +60,10 @@ export class PerfilComponent implements OnInit {
 
         this.ServicioUsuario.verUsuario({id:this.paramRuta} as Usuario).subscribe((res)=>{
           
-          // console.log(res,this.paramRuta);
-
           if(res.message != "Usuario no encontrado"){
             this.isUser = true;
-            this.usuario = res.data as Usuario;
-            
+            this.usuario = res.data as Usuario;            
           }
-
           this.isLoadedUsuarioForaneo = true;
 
         });

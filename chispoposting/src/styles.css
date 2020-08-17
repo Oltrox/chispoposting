@@ -1,7 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 
 div#preloader {
-    background: #372940;
+    /* background: #372940; */
+    background: #343a40;
     height: 100%;
     left: 0;
     overflow: visible;
@@ -31,7 +32,8 @@ div#preloader {
     border: 10px solid transparent;
     border-radius: 50%;
     z-index: 111;
-    border-left-color: #444;
+    /* border-left-color: #444; */
+    border-left-color: rgb(207, 48, 48);
     -webkit-animation: rotate_three_six 1.5s linear 0s infinite;
     -o-animation: rotate_three_six 1.5s linear 0s infinite;
     animation: rotate_three_six 1.5s linear 0s infinite;

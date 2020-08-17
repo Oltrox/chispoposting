@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { PublicacionesService } from 'src/app/shared/services/publicaciones.service';
 import { Publicacion } from 'src/app/shared/models/publicacion';
 
@@ -9,6 +9,8 @@ import { Publicacion } from 'src/app/shared/models/publicacion';
 })
 export class CarruselComponent implements OnInit {
 
+
+  @Input() isLoadedUsuario: Boolean = new Boolean();
   isLoadadedPublicaciones = false;
 
   publicaciones: Array<Publicacion> = new Array<Publicacion>(); 
@@ -21,7 +23,7 @@ export class CarruselComponent implements OnInit {
   constructor(
     public ServicioPublicaciones: PublicacionesService
   ) { 
-
+    console.log("ENTRADA LOADED USUAIRO", this.isLoadedUsuario);
     this.sub = this.ServicioPublicaciones.leerPosts().subscribe((publicaciones_recibidas)=>{
       this.ServicioPublicaciones.publicaciones = publicaciones_recibidas.data as Array<Publicacion>;
 

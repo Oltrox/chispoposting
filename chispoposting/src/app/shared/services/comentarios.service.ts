@@ -20,10 +20,12 @@ export class ComentariosService {
     return this.http.post<any>(`${this.ruta}/`,comentario);
   }
 
-  eliminarComentario(comentario: number): Observable<any>{
-    return this.http.delete<any>(`${this.ruta}/${comentario}`)
+  eliminarComentario(id_comentario: number): Observable<any>{
+    return this.http.delete<any>(`${this.ruta}/${id_comentario}`);
   }
 
-  
+  actualizarComentario(id_comentario: number, comentario:string): Observable<any>{
+    return this.http.put<any>(`${this.ruta}/${id_comentario}`,{ detalle: comentario } );
+  }
 
 }

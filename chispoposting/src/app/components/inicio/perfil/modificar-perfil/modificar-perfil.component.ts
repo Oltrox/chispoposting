@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UsuariosService } from 'src/app/shared/services/usuarios.service';
 import { Usuario } from 'src/app/shared/models/usuario';
@@ -9,14 +9,15 @@ import { Usuario } from 'src/app/shared/models/usuario';
   styleUrls: ['./modificar-perfil.component.css']
 })
 export class ModificarPerfilComponent implements OnInit {
+  
+  isSubmittedPass: boolean = false;
+  isSubmittedTopico: boolean = false;
 
   topicos = {"1": "Cine", "2": "Memes", "3":"Anime", "4":"Game", "5":"Blog"};
 
   formularioModificacionPass: FormGroup;
   formularioModificacionTopico: FormGroup;
 
-  isSubmittedPass: boolean = false;
-  isSubmittedTopico: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,

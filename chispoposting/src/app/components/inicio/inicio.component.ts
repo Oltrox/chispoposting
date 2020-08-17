@@ -9,12 +9,15 @@ import { Usuario } from 'src/app/shared/models/usuario';
 })
 export class InicioComponent implements OnInit {
 
+  isLoadedUsuario = false;
+
   constructor(
     private ServicioUsuarios: UsuariosService
   ) { 
-    
+    console.log("RECONSTRUCTED INICIO");
     this.ServicioUsuarios.verUsuario({ id:localStorage.getItem("usuario") } as Usuario).subscribe((res)=>{
       this.ServicioUsuarios.usuarioActivo = res.data as Usuario;
+      this.isLoadedUsuario = true;
     });
 
   }
