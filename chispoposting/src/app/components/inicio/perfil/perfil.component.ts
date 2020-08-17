@@ -17,6 +17,9 @@ export class PerfilComponent implements OnInit {
   usuario: Usuario = new Usuario();
   paramRuta: string;
 
+  isLoadedPublicaciones = false;
+  isLoadedUsuarioForaneo = false;
+
   isForeign = true;
   isUser = false;
 
@@ -48,6 +51,8 @@ export class PerfilComponent implements OnInit {
 
         this.ServicioPublicaciones.leerPublicacionesUsuarioForaneo(this.paramRuta).subscribe((res)=>{
           this.publicacionesUsuario = res.data as Array<Publicacion>;
+
+          this.isLoadedPublicaciones = true;
         });
 
         this.ServicioUsuario.verUsuario({id:this.paramRuta} as Usuario).subscribe((res)=>{
@@ -57,7 +62,10 @@ export class PerfilComponent implements OnInit {
           if(res.message != "Usuario no encontrado"){
             this.isUser = true;
             this.usuario = res.data as Usuario;
+            
           }
+
+          this.isLoadedUsuarioForaneo = true;
 
         });
 
@@ -65,6 +73,7 @@ export class PerfilComponent implements OnInit {
         console.log("22");
         this.ServicioPublicaciones.leerPublicacionesUsuarioPropio(localStorage.getItem("usuario")).subscribe((res)=>{
           this.publicacionesUsuario = res.data as Array<Publicacion>;
+          this.isLoadedPublicaciones = true;
         });
       }
 

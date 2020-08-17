@@ -64,8 +64,8 @@ export class RegistroComponent implements OnInit {
       this.ServicioUsuarios.crearUsuario(registro_usuario).subscribe((res)=>{
 
         if(res.message == "Usuario created successfully"){
-
-          this.ServicioUsuarios.crearSesion(registro_usuario.id);
+          
+          this.ServicioUsuarios.crearSesion(registro_usuario.id, res.token);
           this.router.navigate(["inicio"]);
 
         }

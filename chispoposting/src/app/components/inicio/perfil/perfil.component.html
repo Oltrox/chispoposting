@@ -1,3 +1,4 @@
+<div *ngIf="isForeign && isLoadedPublicaciones && isLoadedUsuarioForaneo || !isLoadedUsuarioForaneo && isLoadedPublicaciones else cargando">  
   <!-- Detalles -->
   <div class="container mt-3">
       <div class="row align-items-center bg-info" *ngIf="!isForeign">
@@ -61,6 +62,7 @@
     </div>
   </div>
   <!-- End Publicaciones -->
+</div>
 
 
   <ng-template #nohay>
@@ -72,5 +74,11 @@
   <ng-template #noexiste>
     <div class="text-center">
       <h1 class="font-weight-light text-center text-lg-left mt-4 mb-0">No existe el usuario :(</h1>
+    </div>
+  </ng-template>
+
+  <ng-template #cargando>
+    <div id="preloader">
+        <div class="spiner"></div>
     </div>
   </ng-template>

@@ -4,6 +4,8 @@
             <h5 class="card-title">{{ publicacion.titulo }}</h5>
             <h6 class="card-subtitle mb-2 text-muted">{{ publicacion.c_publicacion }} </h6>
             <p class="card-text">{{ publicacion.link }}</p>
+            <p class="card-text">Autor: {{ publicacion.usuario.id }}</p>
+            <p class="card-text">Autor correo: {{ publicacion.usuario.correo }}</p>
         </div>
     </div>
 </div>

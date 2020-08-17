@@ -1,3 +1,5 @@
+import { Usuario } from './usuario';
+
 export class Publicacion {
     c_publicacion: number;
     c_usuario: number;
@@ -10,6 +12,7 @@ export class Publicacion {
     f_creacion: string;
     visible: number;
     eliminado: number;
+    usuario: Usuario;
 
     constructor(
         c_publicacion: number = 0,
@@ -22,7 +25,8 @@ export class Publicacion {
         n_comentarios: number = 0,
         f_creacion: string = "",
         visible: number = 0,
-        eliminado: number = 0
+        eliminado: number = 0,
+        usuario: any = new Usuario()
     ){
 
         this.c_publicacion = c_publicacion;
@@ -36,6 +40,7 @@ export class Publicacion {
         this.f_creacion = f_creacion;
         this.visible = visible;
         this.eliminado = eliminado;
+        this.usuario = usuario;
     }
 
 

@@ -1,5 +1,6 @@
 
-<div class="container-fluid">
+
+<div class="container-fluid" *ngIf="isLoadadedPublicaciones else cargando">
     <div class="row" style="margin-top:3rem; ">
         <div class="col-2">
         </div>
@@ -84,3 +85,9 @@
     </div>
 </div>
 
+
+<ng-template #cargando>
+    <div id="preloader">
+        <div class="spiner"></div>
+    </div>
+</ng-template>

@@ -48,12 +48,14 @@ export class LoginComponent implements OnInit {
     if (this.formularioLogin.valid){
       this.ServicioUsuarios.login(login_usuario).subscribe((res)=>{
 
-        if(res.message == "ok"){
-
-          this.ServicioUsuarios.crearSesion(login_usuario.id);
-
+        if(res.message == "Correctamente logeado"){
+          console.log(res.token);
+          this.ServicioUsuarios.crearSesion(login_usuario.id, res.token);
           this.router.navigate(["inicio"]);
+        }
 
+        if(res.message == "Contrasena incorrecta"){
+          alert("Usuario o contraseña incorrectos");
         }
 
       })

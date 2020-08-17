@@ -64,6 +64,8 @@ export class ModificarPerfilComponent implements OnInit {
           this.isSubmittedPass = false;
         }else if (res.message == "Contrasena incorrecta"){
           alert("La contraseña actual ingresada no es correcta");
+        }else if("La nueva contrasena es la misma que la antigua"){
+          alert("La nueva contrasena es la misma que la antigua");
         }
 
       })

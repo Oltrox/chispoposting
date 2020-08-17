@@ -9,21 +9,27 @@ import { Publicacion } from 'src/app/shared/models/publicacion';
 })
 export class CarruselComponent implements OnInit {
 
+  isLoadadedPublicaciones = false;
+
   publicaciones: Array<Publicacion> = new Array<Publicacion>(); 
   publicacionActual: Publicacion = new Publicacion();
 
   pos = 0;
 
+  sub;
+
   constructor(
     public ServicioPublicaciones: PublicacionesService
   ) { 
 
-    this.ServicioPublicaciones.leerPosts().subscribe((publicaciones_recibidas)=>{
+    this.sub = this.ServicioPublicaciones.leerPosts().subscribe((publicaciones_recibidas)=>{
       this.ServicioPublicaciones.publicaciones = publicaciones_recibidas.data as Array<Publicacion>;
 
       this.publicaciones =  publicaciones_recibidas.data as Array<Publicacion>;
-
+      console.log(this.publicaciones);
       this.publicacionActual = this.publicaciones[this.pos];
+
+      this.isLoadadedPublicaciones = true;
     });
 
     // this.publicacionActual = this.ServicioPublicaciones.publicaciones[this.pos];

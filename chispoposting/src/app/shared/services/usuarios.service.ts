@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Usuario } from '../models/usuario';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 
@@ -33,7 +33,7 @@ export class UsuariosService {
 
   // llega
   verUsuario(usuario: Usuario): Observable<any>{
-    return this.http.get<any>(`${this.ruta}/usuario/${usuario.id}`);
+    return this.http.get<any>(`${this.ruta}/usuario/${usuario.id}`, {headers:{'usuario_token':localStorage.getItem("token")}});
   }
 
   // llega
@@ -41,12 +41,15 @@ export class UsuariosService {
     return this.http.post<any>(`${this.ruta}/usuario/login`, usuario);
   }
 
-  crearSesion(usuario:string){
+  crearSesion(usuario:string, token:string){
     localStorage.setItem("usuario",usuario);
+    localStorage.setItem("token",token);
   }
 
   cerrarSesion(){
     localStorage.removeItem("usuario");
+    localStorage.removeItem("token");
+
   }
   
 
