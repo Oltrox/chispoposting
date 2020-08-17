@@ -24,7 +24,7 @@ export class NavegacionComponent implements OnInit {
 
   cerrar_sesion(){
     this.ServicioUsuarios.cerrarSesion();
-    this.router.navigate(["auth"]);
+    this.router.navigate(["/auth"]);
   }
 
 
