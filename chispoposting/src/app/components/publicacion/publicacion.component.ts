@@ -18,6 +18,8 @@ export class PublicacionComponent implements OnInit {
   comentarios: Array<Comentario> = new Array<Comentario>();
   
   isLogged: boolean = false;
+  isSameUser: boolean = false;
+
 
   constructor(
     private ServicioPublicacion: PublicacionesService,
@@ -35,6 +37,12 @@ export class PublicacionComponent implements OnInit {
       
       console.log(res);
       this.publicacion = res.data as Publicacion;
+      this.publicacion.usuario = res.usuario[0] as Usuario;
+
+      console.log(localStorage.getItem("usuario"));
+      if(localStorage.getItem("usuario") == this.publicacion.usuario.id){
+        this.isSameUser = true;
+      }
     });
 
     if(this.isLogged){

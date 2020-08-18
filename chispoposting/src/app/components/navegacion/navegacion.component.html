@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="/inicio">
-      <img src="https://i.ibb.co/Rb7vp1L/logo.png" width="150" height="60"> 
+      <img src="https://i.ibb.co/KKHy8c8/logo.png" width="150" height="60"> 
     </a>
   
     <button class="navbar-toggler" type="button" (click)="navbarCollapsed = !navbarCollapsed" [attr.aria-expanded]="!navbarCollapsed" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -10,21 +10,21 @@
     <div class="collapse navbar-collapse" [ngbCollapse]="navbarCollapsed" id="navbarEncabezado">
       <ul class="navbar-nav ml-auto">
         
-        <li class="nav-item mx-1">
-          <span class="bg-primary text-white p-2" >{{ this.ServicioUsuarios.usuarioActivo.id }}</span>
-        </li>
+        <!-- <li class="nav-item mx-1">
+          <span class="bg-primary text-white p-2" ></span>
+        </li> -->
 
         <li class="nav-item mx-1">
           <a type="button" class="btn btn-primary" routerLink="/inicio/publicaciones" >Publicaciones</a>
         </li>
         <li class="nav-item mx-1">
-          <a type="button" class="btn btn-primary" routerLink="/inicio/perfil/{{ usuario }}" >Perfil</a>
+          <a type="button" class="btn btn-secondary" routerLink="/inicio/perfil/{{ usuario }}" >{{ this.ServicioUsuarios.usuarioActivo.id }}</a>
         </li>
         <!-- <li class="nav-item mx-1">
           <a type="button" class="btn btn-success" >Notificaciones</a>
         </li> -->
         <li  class="nav-item mx-1">
-          <button type="button" class="btn btn-warning" routerLink="/inicio/publicar">PUBLICAR</button>    
+          <button type="button" class="btn btn-success" routerLink="/inicio/publicar">PUBLICAR</button>    
         </li>
         <li  class="nav-item mx-1">
           <button type="button" class="btn btn-danger" (click)="cerrar_sesion()">Cerrar Sesion</button>    

@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PublicacionesService } from 'src/app/shared/services/publicaciones.service';
 import { Publicacion } from 'src/app/shared/models/publicacion';
+import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-carrusel',
@@ -9,6 +11,7 @@ import { Publicacion } from 'src/app/shared/models/publicacion';
 })
 export class CarruselComponent implements OnInit {
 
+  link_publicacion: string = "";
 
   @Input() isLoadedUsuario: Boolean = new Boolean();
   isLoadadedPublicaciones = false;
@@ -21,7 +24,9 @@ export class CarruselComponent implements OnInit {
   sub;
 
   constructor(
-    public ServicioPublicaciones: PublicacionesService
+    public ServicioPublicaciones: PublicacionesService,
+    private router: Router,
+    private modalService: NgbModal
   ) { 
     console.log("ENTRADA LOADED USUAIRO", this.isLoadedUsuario);
     this.sub = this.ServicioPublicaciones.leerPosts().subscribe((publicaciones_recibidas)=>{
@@ -60,6 +65,16 @@ export class CarruselComponent implements OnInit {
     this.publicacionActual = this.publicaciones[this.pos];
 
   }
+
+  irPublicacion(){
+    this.router.navigate([`/publicacion/${this.publicacionActual.c_publicacion}`]);
+  }
+
+  mostrarLink(content) {
+    this.link_publicacion = `http://localhost:4200/publicacion/${this.publicacionActual.c_publicacion}`;
+    this.modalService.open(content, { centered: true });
+  }
+
   
 
 }

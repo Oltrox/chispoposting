@@ -20,6 +20,7 @@ import { PublicacionComentarioComponent } from './components/publicacion/publica
 import { PublicacionDetalleComponent } from './components/publicacion/publicacion-detalle/publicacion-detalle.component';
 import { ModificarPerfilComponent } from './components/inicio/perfil/modificar-perfil/modificar-perfil.component';
 import { AgregarPublicacionComponent } from './components/publicacion/agregar-publicacion/agregar-publicacion.component';
+import { ModificarPublicacionComponent } from './components/publicacion/modificar-publicacion/modificar-publicacion.component';
 
 import { PublicacionesService } from './shared/services/publicaciones.service';
 import { UsuariosService } from './shared/services/usuarios.service';
@@ -42,7 +43,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     PublicacionComponent,
     PublicacionComentarioComponent,
     ModificarPerfilComponent,
-    AgregarPublicacionComponent
+    AgregarPublicacionComponent,
+    ModificarPublicacionComponent
   ],
   imports: [
     BrowserModule,

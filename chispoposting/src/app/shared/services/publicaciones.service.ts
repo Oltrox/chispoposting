@@ -9,8 +9,12 @@ import { Publicacion } from '../models/publicacion';
 export class PublicacionesService {
 
   publicaciones: Array<Publicacion> = new Array<Publicacion>();
+  publicacionModificar: Publicacion = new Publicacion();
+  
   
   ruta: string = "http://localhost:4000/api/publicacion"
+
+
 
   constructor( private http: HttpClient ) { }
  
@@ -33,6 +37,10 @@ export class PublicacionesService {
 
   publicar(publicacion: Publicacion): Observable<any>{
     return this.http.post<any>(`${this.ruta}/`,publicacion);
+  }
+
+  modificarPublicacion(modificacion: Publicacion): Observable<any>{
+    return this.http.put<any>(`${this.ruta}/${modificacion.c_publicacion}`, modificacion);
   }
 
 }

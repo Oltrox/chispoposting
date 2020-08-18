@@ -10,6 +10,7 @@ import { CarruselComponent } from 'src/app/components/inicio/carrusel/carrusel.c
 import { PublicacionComponent } from 'src/app/components/publicacion/publicacion.component';
 import { ModificarPerfilComponent } from 'src/app/components/inicio/perfil/modificar-perfil/modificar-perfil.component';
 import { AgregarPublicacionComponent } from 'src/app/components/publicacion/agregar-publicacion/agregar-publicacion.component';
+import { ModificarPublicacionComponent } from 'src/app/components/publicacion/modificar-publicacion/modificar-publicacion.component';
 
 const routes: Routes = [
   {
@@ -25,13 +26,13 @@ const routes: Routes = [
       { path: 'modificarperfil', component: ModificarPerfilComponent },
       { path: 'publicaciones', component: CarruselComponent },
       { path: 'notificaciones', component: NotificacionesComponent },
-      { path: 'publicar', component: AgregarPublicacionComponent }
+      { path: 'publicar', component: AgregarPublicacionComponent },
+      { path: 'modificar/publicacion', component: ModificarPublicacionComponent }
     ]
   },
   {
     path:'publicacion/:id', component: PublicacionComponent
   }
-  
 
 ];
 
