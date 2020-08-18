@@ -38,10 +38,12 @@ export class PublicacionComponent implements OnInit {
       
       console.log(res);
       this.publicacion = res.data as Publicacion;
-      this.publicacion.usuario = res.usuario[0] as Usuario;
+      this.publicacion.usuario = res.usuario as Usuario;
 
       console.log(this.isYoutube);
       console.log(this.publicacion.link);
+      console.log(this.publicacion.usuario);
+
       if(this.publicacion.link.includes("www.youtube.com")){
         this.isYoutube = true;
         console.log(this.isYoutube);
@@ -52,6 +54,7 @@ export class PublicacionComponent implements OnInit {
       if(localStorage.getItem("usuario") == this.publicacion.usuario.id){
         this.isSameUser = true;
       }
+
     });
 
     if(this.isLogged){

@@ -25,6 +25,7 @@ import { ModificarPublicacionComponent } from './components/publicacion/modifica
 import { PublicacionesService } from './shared/services/publicaciones.service';
 import { UsuariosService } from './shared/services/usuarios.service';
 import { ComentariosService } from './shared/services/comentarios.service';
+import { EvaluacionService } from './shared/services/evaluacion.service';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -57,7 +58,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
   providers: [
     PublicacionesService,
     UsuariosService,
-    ComentariosService
+    ComentariosService,
+    EvaluacionService
   ],
   bootstrap: [AppComponent]
 })
