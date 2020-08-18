@@ -14,5 +14,8 @@ const Evaluacion = sequelize.define('evaluacion', {
         type: Sequelize.SMALLINT
     }
 },{
-    timestamps: false
+    timestamps: false,
+    freezeTableName: true
 });
+
+export default Evaluacion;

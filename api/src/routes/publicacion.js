@@ -1,7 +1,7 @@
 import { Router } from 'express';
 const router = Router();
 
-import { createPublicacion, getPublicaciones, getPublicacion, getPublicacionesTopico, invisiblePublicacion, deletePublicacion, updatePublicacion, getPublicacionesPropias, getPublicacionesUsuario, getPublicacionesUsuarios } from '../controllers/publicacion.controller';
+import { createPublicacion, getPublicaciones, getPublicacion, getPublicacionesTopico, invisiblePublicacion, deletePublicacion, updatePublicacion, getPublicacionesPropias, getPublicacionesUsuario, getPublicacionesUsuarios, getUsuariosTopico } from '../controllers/publicacion.controller';
 
 // /api/publicacion/...
 router.post('/', createPublicacion);
@@ -13,9 +13,8 @@ router.get('/usuario/:id', getPublicacionesUsuario); // Enviar con usuario
 
 router.get('/:c_publicacion', getPublicacion); // Enviar con usuario (2 objetos)
 
-router.get('/:c_publicacion', getPublicacion); // Enviar con usuario (2 objetos)
-
 router.get('/topico/:topico', getPublicacionesTopico);
+router.get('/topico/usuario/:topico', getUsuariosTopico);
 router.get('/propias/:id', getPublicacionesPropias);
 
 router.delete('/invisible/:c_publicacion', invisiblePublicacion);

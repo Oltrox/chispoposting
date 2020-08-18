@@ -5,10 +5,12 @@ import { createComentario, getComentario, getComentariosPublicacion, getComentar
 
 // /api/comentario/...
 router.post('/', createComentario);
+
+router.get('/', getComentarios);
 router.get('/:c_comentario', getComentario);
 router.get('/publicacion/:c_publicacion', getComentariosPublicacion);
 router.get('/usuario/:c_usuario', getComentariosUsuario);
-router.get('/', getComentarios);
+
 router.delete('/:c_comentario', deleteComentario);
 router.put('/:c_comentario', updateComentario);
 

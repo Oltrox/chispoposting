@@ -4,9 +4,6 @@ import bcrypt, { compareSync } from 'bcrypt';
 import jwt from 'jwt-simple';
 import moment from 'moment';
 import { sequelize } from '../database/database';
-import { token } from 'morgan';
-import e from 'cors';
-
 
 //aplicar lowercast
 // correo tiene que ser unico
@@ -43,10 +40,6 @@ export async function checkToken(req, res, next) {
             }
         });
         if (usuario) {
-            console.log(token);
-            console.log(usuario.token);
-            console.log(usuario.token.localeCompare(token));
-
             if (usuario.token.localeCompare(token) == 0) {
                 console.log("##########Token valido###############");
 
@@ -75,22 +68,8 @@ export async function createUsuario(req, res) {
     try {
 
         req.body.password = bcrypt.hashSync(req.body.password, 10);
+        req.body.id = req.body.id.replace(/\s/g, '');
         var { id, password, correo, topico, f_nacimiento } = req.body;
-
-        /*
-        let usuario = Usuarios.findOne({
-            where: {
-                [Op.or]: [
-                    {
-                        id: id.toLowerCase()
-                    },
-                    {
-                        correo: correo.toLowerCase()
-                    }
-                ]
-            }
-        });
-        */
 
         let newUsuario = await Usuario.create({
             id: id,
@@ -121,7 +100,7 @@ export async function createUsuario(req, res) {
             });
         };
     } catch (error) {
-        //console.log(error);
+        console.log(error);
         if (error.errors[0].message == "id must be unique") {
             res.status(501).json({
                 message: 'ID used',
@@ -193,7 +172,27 @@ export async function getUsuario(req, res) {
             data: {}
         });
     };
+};
 
+export async function getUsuarioId(req, res) {
+    try {
+        let usuarios = await Usuario.findAll({
+            attributes: ['id'],
+            where:{
+                estado: 0
+            }
+        });
+        res.json({
+            message: 'Usuarios encontrados',
+            data: usuarios
+        });
+    } catch (error) {
+        console.log(error);
+        res.json({
+            message: 'Something goes wrong',
+            data: {}
+        });
+    };
 };
 
 //pasar de eliminar a modificar el estado del usuario
@@ -268,7 +267,6 @@ export async function updateUsuario(req, res) {
         if (tipo == 1) {
 
             var { c_antigua, c_nueva } = req.body.valor;
-            console.log(bcrypt.compareSync(c_antigua, usuario.password));
 
             if (!bcrypt.compareSync(c_antigua, usuario.password)) {
                 return res.json({
@@ -340,7 +338,6 @@ export async function login(req, res) {
             sequelize.fn('lower', id.toLowerCase())
         )
     }).then(async (usuario) => {
-        console.log(usuario);
         if (usuario === undefined) {
             res.json({
                 message: 'Usuario no existe'

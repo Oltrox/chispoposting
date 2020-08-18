@@ -11,10 +11,11 @@ const Seguir = sequelize.define('seguir', {
         primaryKey: true
     },
     f_seguir: {
-        type: DATE
+        type: Sequelize.DATE
     }
 },{
-    timestamps: false
+    timestamps: false,
+    freezeTableName: true
 });
 
 export default Seguir;
