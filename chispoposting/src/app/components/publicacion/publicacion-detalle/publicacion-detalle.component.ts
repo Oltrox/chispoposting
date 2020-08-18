@@ -12,8 +12,8 @@ export class PublicacionDetalleComponent implements OnInit {
 
   @Input() publicacion: Publicacion = new Publicacion();
   @Input() isSameUser: Boolean = false; // Para el carrusel, este valor debe ser falso
-  
-  isYoutube: boolean = false;
+  @Input() isYoutube: Boolean;
+
 
   constructor(
     private ServicioPubliaciones: PublicacionesService,
@@ -21,7 +21,6 @@ export class PublicacionDetalleComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.linkyt();
   }
 
   modificarPublicacion(publicacion: Publicacion){
@@ -29,9 +28,4 @@ export class PublicacionDetalleComponent implements OnInit {
     this.router.navigate(["/inicio/modificar/publicacion"]);
   }
 
-  linkyt(){
-    if(this.publicacion.link.includes("www.youtube.com")){
-      this.isYoutube = true;
-    }
-  }
 }

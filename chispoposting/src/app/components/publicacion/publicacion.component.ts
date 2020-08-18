@@ -19,6 +19,7 @@ export class PublicacionComponent implements OnInit {
   
   isLogged: boolean = false;
   isSameUser: boolean = false;
+  isYoutube: boolean = false; //hacer que funque en publicacion sola
 
 
   constructor(
@@ -38,6 +39,14 @@ export class PublicacionComponent implements OnInit {
       console.log(res);
       this.publicacion = res.data as Publicacion;
       this.publicacion.usuario = res.usuario[0] as Usuario;
+
+      console.log(this.isYoutube);
+      console.log(this.publicacion.link);
+      if(this.publicacion.link.includes("www.youtube.com")){
+        this.isYoutube = true;
+        console.log(this.isYoutube);
+      }
+      
 
       console.log(localStorage.getItem("usuario"));
       if(localStorage.getItem("usuario") == this.publicacion.usuario.id){
@@ -61,11 +70,7 @@ export class PublicacionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-
     this.estaLogueado();
-
-
   }
   
   estaLogueado(){

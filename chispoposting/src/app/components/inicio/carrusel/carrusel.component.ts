@@ -14,6 +14,8 @@ export class CarruselComponent implements OnInit {
   link_publicacion: string = "";
 
   @Input() isLoadedUsuario: Boolean = new Boolean();
+  @Input() isYoutube: Boolean;
+
   isLoadadedPublicaciones = false;
 
   publicaciones: Array<Publicacion> = new Array<Publicacion>(); 
@@ -56,6 +58,11 @@ export class CarruselComponent implements OnInit {
     }
     
     this.publicacionActual = this.publicaciones[this.pos];
+    if(this.publicacionActual.link.includes("www.youtube.com")){
+      this.isYoutube = true;
+    }else{
+      this.isYoutube = false;
+    }
 
   }
 
@@ -63,6 +70,11 @@ export class CarruselComponent implements OnInit {
     this.pos += 1;
     this.pos =  this.pos % this.publicaciones.length;
     this.publicacionActual = this.publicaciones[this.pos];
+    if(this.publicacionActual.link.includes("www.youtube.com")){
+      this.isYoutube = true;
+    }else{
+      this.isYoutube = false;
+    }
 
   }
 
@@ -75,6 +87,5 @@ export class CarruselComponent implements OnInit {
     this.modalService.open(content, { centered: true });
   }
 
-  
 
 }

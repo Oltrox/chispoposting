@@ -3,9 +3,9 @@
         <div class="card-body">
             <h5 class="card-title">{{ publicacion.titulo }}</h5>
             <h6 class="card-subtitle mb-2 text-muted">Autor: {{ publicacion.usuario.id }} </h6>
-
             <p *ngIf="!isYoutube" class="card-text">{{ publicacion.link }}</p>
-            <div *ngIf="isYoutube">
+
+            <div *ngIf="isYoutube"><!--Funciona en carrucel -->
                 <iframe width="560" height="315" src="https://www.youtube.com/embed/NJX7pFqOZsU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
             <hr/>
