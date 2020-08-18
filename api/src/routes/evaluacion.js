@@ -6,7 +6,7 @@ import { createEvaluacion, getEvaluacionPublicacion, getEvaluacionUsuario, delet
 // /api/evaluacion/...
 router.post('/', createEvaluacion);
 router.get('/publicacion/:c_publicacion', getEvaluacionPublicacion);
-router.get('/usuario/', getEvaluacionUsuario);
+router.post('/usuario/', getEvaluacionUsuario);
 router.delete('/', deleteEvaluacion);
 router.put('/',updateEvaluacion);
 
