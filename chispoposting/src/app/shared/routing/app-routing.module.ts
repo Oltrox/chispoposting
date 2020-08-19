@@ -11,6 +11,11 @@ import { PublicacionComponent } from 'src/app/components/publicacion/publicacion
 import { ModificarPerfilComponent } from 'src/app/components/inicio/perfil/modificar-perfil/modificar-perfil.component';
 import { AgregarPublicacionComponent } from 'src/app/components/publicacion/agregar-publicacion/agregar-publicacion.component';
 import { ModificarPublicacionComponent } from 'src/app/components/publicacion/modificar-publicacion/modificar-publicacion.component';
+import { BusquedaComponent } from 'src/app/components/inicio/busqueda/busqueda.component';
+import { AdministradorComponent } from 'src/app/components/administrador/administrador.component';
+import { ListadopublicacionesComponent } from 'src/app/components/administrador/listadopublicaciones/listadopublicaciones.component';
+import { ListadousuariosComponent } from 'src/app/components/administrador/listadousuarios/listadousuarios.component';
+import { ListadoriesgosasComponent } from 'src/app/components/administrador/listadoriesgosas/listadoriesgosas.component';
 
 const routes: Routes = [
   {
@@ -27,7 +32,13 @@ const routes: Routes = [
       { path: 'publicaciones', component: CarruselComponent },
       { path: 'notificaciones', component: NotificacionesComponent },
       { path: 'publicar', component: AgregarPublicacionComponent },
-      { path: 'modificar/publicacion', component: ModificarPublicacionComponent }
+      { path: 'modificar/publicacion', component: ModificarPublicacionComponent },
+      { path: 'buscar', component: BusquedaComponent },
+      { path: 'administrar', component: AdministradorComponent, children: [
+        { path: 'publicaciones', component: ListadopublicacionesComponent },
+        { path: 'usuarios', component: ListadousuariosComponent },
+        { path: 'riesgosas', component: ListadoriesgosasComponent },
+      ]}
     ]
   },
   {

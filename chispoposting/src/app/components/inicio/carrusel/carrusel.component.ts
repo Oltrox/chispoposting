@@ -4,6 +4,8 @@ import { Publicacion } from 'src/app/shared/models/publicacion';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EvaluacionService } from 'src/app/shared/services/evaluacion.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { UsuariosService } from 'src/app/shared/services/usuarios.service';
 
 @Component({
   selector: 'app-carrusel',
@@ -13,18 +15,21 @@ import { EvaluacionService } from 'src/app/shared/services/evaluacion.service';
 export class CarruselComponent implements OnInit {
 
   link_publicacion: string = "";
+  tipo:string = "publicacion";
 
   @Input() isLoadedUsuario: Boolean = new Boolean();
   @Input() isYoutube: Boolean;
+  @Input() ytUrl: any = "" ;
+  @Input() isImg: Boolean = false;
+  @Input() imgUrl: any = "";
 
   isLoadadedPublicaciones = false;
   isEvaluado: boolean = false;
 
-  evaluadoState: string = "No hay evaluacion";
+  evaluadoState: string = "Buscando tu evaluacion";
 
   publicaciones: Array<Publicacion> = new Array<Publicacion>(); 
   publicacionActual: Publicacion = new Publicacion();
-
 
   pos = 0;
 
@@ -37,8 +42,10 @@ export class CarruselComponent implements OnInit {
   constructor(
     public ServicioPublicaciones: PublicacionesService,
     private ServicioEvaluaciones: EvaluacionService,
+    public ServicioUsuarios: UsuariosService,
     private router: Router,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private sanitizer: DomSanitizer
   ) { 
     console.log("ENTRADA LOADED USUAIRO", this.isLoadedUsuario);
     this.sub = this.ServicioPublicaciones.leerPosts().subscribe((publicaciones_recibidas)=>{
@@ -46,7 +53,6 @@ export class CarruselComponent implements OnInit {
 
       this.publicaciones =  publicaciones_recibidas.data as Array<Publicacion>;
       this.publicacionActual = this.publicaciones[this.pos];
-
 
       this.getEvaluacion();
 
@@ -63,12 +69,24 @@ export class CarruselComponent implements OnInit {
     if(this.pos > 0){
       this.pos -=1;
     }else{
-      this.pos = this.publicaciones.length;
+      this.pos = this.publicaciones.length -1 ;
     }
+    console.log("valor previo", this.pos);
     
     this.publicacionActual = this.publicaciones[this.pos];
+
+    if( this.publicacionActual.link.includes(".jpg") || this.publicacionActual.link.includes(".png") || this.publicacionActual.link.includes(".gif")  ){
+      this.imgUrl = this.publicacionActual.link;
+      this.imgUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.imgUrl);
+      this.isImg = true;
+    }else{
+      this.isImg = false;
+    }
+
     if(this.publicacionActual.link.includes("www.youtube.com")){
       this.isYoutube = true;
+      this.ytUrl = "https://www.youtube.com/embed/" + this.publicacionActual.link.replace('https://www.youtube.com/watch?v=','');
+      this.ytUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.ytUrl);
     }else{
       this.isYoutube = false;
     }
@@ -81,8 +99,22 @@ export class CarruselComponent implements OnInit {
     this.pos += 1;
     this.pos =  this.pos % this.publicaciones.length;
     this.publicacionActual = this.publicaciones[this.pos];
+
+    console.log("valor previo", this.pos);
+
+    if( this.publicacionActual.link.includes(".jpg") || this.publicacionActual.link.includes(".png") || this.publicacionActual.link.includes(".gif")  ){
+      this.imgUrl = this.publicacionActual.link;
+      this.imgUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.imgUrl);
+      this.isImg = true;
+    }else{
+      this.isImg = false;
+    }
+
     if(this.publicacionActual.link.includes("www.youtube.com")){
       this.isYoutube = true;
+      this.ytUrl = "https://www.youtube.com/embed/" + this.publicacionActual.link.replace('https://www.youtube.com/watch?v=','');
+      this.ytUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.ytUrl);
+      
     }else{
       this.isYoutube = false;
     }

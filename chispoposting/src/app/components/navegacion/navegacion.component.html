@@ -15,19 +15,46 @@
         </li> -->
 
         <li class="nav-item mx-1">
-          <a type="button" class="btn btn-primary" routerLink="/inicio/publicaciones" >Publicaciones</a>
+          <a type="button" class="btn btn-primary" routerLink="/inicio/publicaciones" >
+            <svg width="1.3em" height="1.3em" viewBox="0 0 16 16" class="bi bi-journals" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 2h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2z"/>
+              <path d="M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2v-1a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2zM1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z"/>
+            </svg>
+            Publicaciones</a>
         </li>
         <li class="nav-item mx-1">
-          <a type="button" class="btn btn-secondary" routerLink="/inicio/perfil/{{ usuario }}" >{{ this.ServicioUsuarios.usuarioActivo.id }}</a>
+          <a type="button" class="btn btn-light" routerLink="/inicio/buscar" >
+            <svg width="1.3em" height="1.3em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
+              <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+            </svg>
+            Busqueda</a>
+        </li>
+        <li class="nav-item mx-1">
+          <a type="button" class="btn btn-secondary" routerLink="/inicio/perfil/{{ usuario }}" >
+            <svg width="1.3em" height="1.3em" viewBox="0 0 16 16" class="bi bi-person-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+            </svg>
+              {{ this.ServicioUsuarios.usuarioActivo.id }}
+          </a>
         </li>
         <!-- <li class="nav-item mx-1">
           <a type="button" class="btn btn-success" >Notificaciones</a>
         </li> -->
         <li  class="nav-item mx-1">
-          <button type="button" class="btn btn-success" routerLink="/inicio/publicar">PUBLICAR</button>    
+          <button type="button" class="btn btn-success" routerLink="/inicio/publicar">
+            <svg width="1.3em" height="1.3em" viewBox="0 0 16 16" class="bi bi-plus-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4a.5.5 0 0 0-1 0v3.5H4a.5.5 0 0 0 0 1h3.5V12a.5.5 0 0 0 1 0V8.5H12a.5.5 0 0 0 0-1H8.5V4z"/>
+            </svg>
+            Publicar</button>    
         </li>
         <li  class="nav-item mx-1">
-          <button type="button" class="btn btn-danger" (click)="cerrar_sesion()">Cerrar Sesion</button>    
+          <button type="button" class="btn btn-danger" (click)="cerrar_sesion()">
+            <svg width="1.3em" height="1.3em" viewBox="0 0 16 16" class="bi bi-power" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M5.578 4.437a5 5 0 1 0 4.922.044l.5-.866a6 6 0 1 1-5.908-.053l.486.875z"/>
+              <path fill-rule="evenodd" d="M7.5 8V1h1v7h-1z"/>
+            </svg>
+            Cerrar Sesion</button>    
         </li>
         <!-- <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">            Dropdown on Right</a>

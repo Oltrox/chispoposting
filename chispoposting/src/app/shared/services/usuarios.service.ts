@@ -41,6 +41,42 @@ export class UsuariosService {
     return this.http.post<any>(`${this.ruta}/usuario/login`, usuario);
   }
 
+  seguirPerfil(usuarios: any): Observable<any>{
+    return this.http.post<any>(`${this.ruta}/seguir/`,usuarios);
+  }
+
+  dejarSeguirPerfil(usuarios:any): Observable<any>{
+    return this.http.delete<any>(`${this.ruta}/seguir/${usuarios.id_1}/${usuarios.id_2}`);
+  }
+
+  getSeguimientoPerfil(usuarios: any): Observable<any>{
+    return this.http.post<any>(`${this.ruta}/seguir/seguido/`,usuarios);
+  }
+
+  obtenerUsuariosBusqueda(): Observable<any>{
+    return this.http.get<any>(`${this.ruta}/usuario/id`);
+  }
+
+  castigarUsuario(datos:any): Observable<any>{
+    return this.http.put<any>(`${this.ruta}/usuario/castigar/`,datos);
+  }  
+
+  asignarMembresiaCastigo(datos:any): Observable<any>{
+    return this.http.put<any>(`${this.ruta}/usuario/membresiacastigo/`,datos);
+  }
+
+  asignarMembresiaEliminacion(datos:any): Observable<any>{
+    return this.http.put<any>(`${this.ruta}/usuario/membresiaeliminacion/`,datos);
+  }
+
+  asignarModerador(usuario:any):Observable<any>{
+    return this.http.put<any>(`${this.ruta}/usuario/moderador/asignar/`,usuario);
+  }
+
+  quitarModerador(usuario:any):Observable<any>{
+    return this.http.put<any>(`${this.ruta}/usuario/moderador/quitar/`,usuario);
+  }
+
   crearSesion(usuario:string, token:string){
     localStorage.setItem("usuario",usuario);
     localStorage.setItem("token",token);
@@ -49,8 +85,10 @@ export class UsuariosService {
   cerrarSesion(){
     localStorage.removeItem("usuario");
     localStorage.removeItem("token");
-
   }
-  
+
+
+
+
 
 }

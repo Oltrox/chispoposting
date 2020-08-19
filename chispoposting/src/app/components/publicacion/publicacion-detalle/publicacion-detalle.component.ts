@@ -12,7 +12,12 @@ export class PublicacionDetalleComponent implements OnInit {
 
   @Input() publicacion: Publicacion = new Publicacion();
   @Input() isSameUser: Boolean = false; // Para el carrusel, este valor debe ser falso
+
   @Input() isYoutube: Boolean = false;
+  @Input() ytUrl: String = "";
+
+  @Input() isImg: Boolean = false;
+  @Input() imgUrl: String = "";
 
 
   constructor(

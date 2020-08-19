@@ -1,3 +1,4 @@
+<app-navegacion-moderador *ngIf="ServicioUsuarios.usuarioActivo.tipo == 1 || ServicioUsuarios.usuarioActivo.tipo == 2 && isLoadadedPublicaciones" [publicacionActual]="publicacionActual" [tipo]="tipo"></app-navegacion-moderador>
 
 
 <div class="container-fluid" *ngIf="isLoadadedPublicaciones else cargando">
@@ -5,13 +6,13 @@
         <div class="col-2">
         </div>
 
-        <div class="col-8 " style="height: 450px;">
-            <div id="carouselExampleControls" class="carousel slide bg-info h-100" data-ride="carousel">
+        <div class="col-8 " style="min-height: 450px;">
+            <div id="carouselExampleControls" class="abiwhyyouleaveme carousel slide bg-info h-100" data-ride="carousel">
                 
                 <div class="carousel-inner">
-                  <div class="carousel-item active h-100">
-                    <div style="margin-top: 3rem;">
-                          <app-publicacion-detalle [isYoutube]="isYoutube" [publicacion]="publicacionActual"></app-publicacion-detalle>
+                  <div class="carousel-item active">
+                    <div>
+                          <app-publicacion-detalle [isImg]="isImg" [imgUrl]="imgUrl" [isYoutube]="isYoutube" [ytUrl]="ytUrl" [publicacion]="publicacionActual"></app-publicacion-detalle>
                      </div>
                   </div>
                 </div>
@@ -36,7 +37,7 @@
                         
                         <div class="row text-center" style="margin:1rem;"  >
                         <!--BOTONES-->
-                            <div  *ngIf="!isEvaluado else evaluacion">
+                            <div  class="row" *ngIf="!isEvaluado else evaluacion">
                               <div class="col">
                                   <button class="btn btn-primary round-btn" (click)="evaluar(0)">
                                       <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi bi-heart" fill="currentColor" xmlns="http://www.w3.org/2000/svg">

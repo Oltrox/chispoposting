@@ -1,26 +1,16 @@
 <app-navegacion *ngIf="isLogged"></app-navegacion>
+<app-navegacion-moderador *ngIf="ServicioUsuarios.usuarioActivo.tipo == 1 || ServicioUsuarios.usuarioActivo.tipo == 2 && isLoadadedPublicaciones && isLogged" [publicacionActual]="publicacion" [tipo]="tipo"></app-navegacion-moderador>
+
 
 <div class="container">
-    <div class="row bg-info" style="height: 420px; margin-top: 3rem; ">
-        <div class="col">
-        </div>
-        <div class="col-6">
-            <div style="margin-top: 20%;">
-                <app-publicacion-detalle [publicacion]="publicacion" [isSameUser]="isSameUser" [isYoutube]="isYoutube"></app-publicacion-detalle>
+    <div class="row bg-info" style="min-height: 420px; margin-top: 3rem; ">
+        <div class="col-8">
+            <div class="abiwhyyouleaveme mt-3 mb-3" style="min-height:50vh; max-height:90vh;">
+                <app-publicacion-detalle [publicacion]="publicacion" [isSameUser]="isSameUser" [isYoutube]="isYoutube" [ytUrl]="ytUrl" [isImg]="isImg" [imgUrl]="imgUrl" ></app-publicacion-detalle>
             </div>
         </div>
-        <div class="col">
-        </div>        
-    </div>
-    <div class="row bg-light" style="margin-top: 1rem;">
-        <div class="col">
-        </div>
-        
-        <div class="col-6">
+        <div class="col" style="background-color: #d3edf1;">
             <app-publicacion-comentario *ngIf="isLogged" [comentarios]="comentarios"></app-publicacion-comentario>
-        </div>
-
-        <div class="col">
         </div>        
     </div>
 </div>

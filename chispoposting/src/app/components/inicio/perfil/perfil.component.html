@@ -1,3 +1,5 @@
+<app-navegacion-moderador *ngIf="isForeign && isLoadedUsuarioForaneo && (ServicioUsuario.usuarioActivo.tipo == 1 || ServicioUsuario.usuarioActivo.tipo == 2)" [tipo]=tipo [usuario]="usuario"></app-navegacion-moderador>
+
 <div *ngIf="isForeign && isLoadedPublicaciones && isLoadedUsuarioForaneo || !isLoadedUsuarioForaneo && isLoadedPublicaciones else cargando">  
   <!-- Detalles -->
   <div class="container mt-3">
@@ -47,6 +49,7 @@
             <div class="col-10" style="padding-bottom: 2rem;background-color: rgba(0, 0, 0, 0.315);">
               <div class="row" style="margin-left: 300px;">
                 <h2>{{ usuario.id }}</h2>
+                <button class="btn mx-5" [ngClass]="{ 'btn-dark':!isLoadedEstado, 'btn-danger':seguidoStateBoolean, 'btn-primary':!seguidoStateBoolean }" (click)="cambiarSeguir()" >{{ seguidoState }}</button>  
               </div>
               <h4 class= "font-weight-light">Descripcion</h4>
 
@@ -69,11 +72,15 @@
     <h1 class="font-weight-light text-center mt-4 mb-0">Publicaciones</h1>
     <hr class="mt-2 mb-5">
 
-    <div *ngIf="publicacionesUsuario.length > 0 else nohay">
+    <div *ngIf="publicacionesUsuario.length > 0 && isLoadedPublicaciones else nohay">
       <div class="row text-center text-lg-left">
-        <div class="col-lg-3 col-md-4 col-6" *ngFor="let publicacion of publicacionesUsuario">
-          <a [routerLink]="['/publicacion', publicacion.c_publicacion ]" class="d-block mb-4 h-100">
-              <img class="img-fluid img-thumbnail" src="https://source.unsplash.com/pWkk7iiCoDM/400x300" alt="">
+        <div class="col-lg-3 col-md-4 col-6 mb-4" *ngFor="let publicacion of publicacionesUsuario" >
+          <a [routerLink]="['/publicacion', publicacion.c_publicacion ]" class="d-block text-center my-auto h-100 bg-info">
+
+            <img *ngIf="miniaturas[publicacionesUsuario.indexOf(publicacion)] == 0" src="https://img.icons8.com/ios/100/000000/paste-as-text.png" height="150px" width="150px"/>
+            <img *ngIf="miniaturas[publicacionesUsuario.indexOf(publicacion)] == 1" src="https://img.icons8.com/ios/100/000000/video.png" height="150px" width="150px"/>
+            <img *ngIf="miniaturas[publicacionesUsuario.indexOf(publicacion)] == 2" src="https://img.icons8.com/ios/100/000000/image.png" height="150px" width="150px"/>
+
           </a>
         </div>
       </div>

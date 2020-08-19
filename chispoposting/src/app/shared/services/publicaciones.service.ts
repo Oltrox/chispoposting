@@ -10,6 +10,7 @@ export class PublicacionesService {
 
   publicaciones: Array<Publicacion> = new Array<Publicacion>();
   publicacionModificar: Publicacion = new Publicacion();
+  publicacionActual: Publicacion = new Publicacion();
   
   
   ruta: string = "http://localhost:4000/api/publicacion"
@@ -41,6 +42,10 @@ export class PublicacionesService {
 
   modificarPublicacion(modificacion: Publicacion): Observable<any>{
     return this.http.put<any>(`${this.ruta}/${modificacion.c_publicacion}`, modificacion);
+  }
+
+  marcarPublicacion(c_publicacion: number): Observable<any>{
+    return this.http.delete<any>(`${this.ruta}/invisible/${c_publicacion}`);
   }
 
 }

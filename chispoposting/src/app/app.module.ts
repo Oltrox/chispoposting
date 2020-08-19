@@ -19,8 +19,14 @@ import { PublicacionComponent } from './components/publicacion/publicacion.compo
 import { PublicacionComentarioComponent } from './components/publicacion/publicacion-comentario/publicacion-comentario.component';
 import { PublicacionDetalleComponent } from './components/publicacion/publicacion-detalle/publicacion-detalle.component';
 import { ModificarPerfilComponent } from './components/inicio/perfil/modificar-perfil/modificar-perfil.component';
+import { BusquedaComponent } from './components/inicio/busqueda/busqueda.component';
 import { AgregarPublicacionComponent } from './components/publicacion/agregar-publicacion/agregar-publicacion.component';
 import { ModificarPublicacionComponent } from './components/publicacion/modificar-publicacion/modificar-publicacion.component';
+import { NavegacionModeradorComponent } from './components/navegacion-moderador/navegacion-moderador.component';
+import { AdministradorComponent } from './components/administrador/administrador.component';
+import { ListadousuariosComponent } from './components/administrador/listadousuarios/listadousuarios.component';
+import { ListadopublicacionesComponent } from './components/administrador/listadopublicaciones/listadopublicaciones.component';
+import { ListadoriesgosasComponent } from './components/administrador/listadoriesgosas/listadoriesgosas.component';
 
 import { PublicacionesService } from './shared/services/publicaciones.service';
 import { UsuariosService } from './shared/services/usuarios.service';
@@ -45,7 +51,13 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     PublicacionComentarioComponent,
     ModificarPerfilComponent,
     AgregarPublicacionComponent,
-    ModificarPublicacionComponent
+    ModificarPublicacionComponent,
+    NavegacionModeradorComponent,
+    BusquedaComponent,
+    AdministradorComponent,
+    ListadousuariosComponent,
+    ListadopublicacionesComponent,
+    ListadoriesgosasComponent
   ],
   imports: [
     BrowserModule,

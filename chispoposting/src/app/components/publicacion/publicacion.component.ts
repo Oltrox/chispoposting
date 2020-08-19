@@ -6,6 +6,7 @@ import { Comentario } from 'src/app/shared/models/comentario';
 import { ComentariosService } from 'src/app/shared/services/comentarios.service';
 import { UsuariosService } from 'src/app/shared/services/usuarios.service';
 import { Usuario } from 'src/app/shared/models/usuario';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-publicacion',
@@ -13,20 +14,27 @@ import { Usuario } from 'src/app/shared/models/usuario';
   styleUrls: ['./publicacion.component.css']
 })
 export class PublicacionComponent implements OnInit {
+  tipo:string = "publicacion";
 
   publicacion: Publicacion = new Publicacion();
   comentarios: Array<Comentario> = new Array<Comentario>();
   
+  isLoadadedPublicaciones = false;
   isLogged: boolean = false;
   isSameUser: boolean = false;
   isYoutube: boolean = false; //hacer que funque en publicacion sola
+  ytUrl: any = "";
+
+  isImg: boolean = false;
+  imgUrl: any = "";
 
 
   constructor(
     private ServicioPublicacion: PublicacionesService,
     private ServicioComentarios: ComentariosService,
-    private ServicioUsuarios: UsuariosService,
-    private rutaActual: ActivatedRoute 
+    public ServicioUsuarios: UsuariosService,
+    private rutaActual: ActivatedRoute,
+    private sanitizer: DomSanitizer
   ) { 
 
     this.estaLogueado();
@@ -45,8 +53,19 @@ export class PublicacionComponent implements OnInit {
       console.log(this.publicacion.usuario);
 
       if(this.publicacion.link.includes("www.youtube.com")){
+        this.ytUrl = "https://www.youtube.com/embed/" + this.publicacion.link.replace('https://www.youtube.com/watch?v=','');
+        this.ytUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.ytUrl);
         this.isYoutube = true;
+        
         console.log(this.isYoutube);
+        console.log(this.ytUrl);
+        
+      }
+
+      if( this.publicacion.link.includes(".jpg") || this.publicacion.link.includes(".png") || this.publicacion.link.includes(".gif")  ){
+        this.imgUrl = this.publicacion.link;
+        this.imgUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.imgUrl);
+        this.isImg = true;
       }
       
 
@@ -54,6 +73,8 @@ export class PublicacionComponent implements OnInit {
       if(localStorage.getItem("usuario") == this.publicacion.usuario.id){
         this.isSameUser = true;
       }
+
+      this.isLoadadedPublicaciones = true;
 
     });
 
