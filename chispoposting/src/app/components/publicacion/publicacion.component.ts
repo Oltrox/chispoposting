@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PublicacionesService } from 'src/app/shared/services/publicaciones.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Publicacion } from 'src/app/shared/models/publicacion';
 import { Comentario } from 'src/app/shared/models/comentario';
 import { ComentariosService } from 'src/app/shared/services/comentarios.service';
@@ -34,6 +34,7 @@ export class PublicacionComponent implements OnInit {
     private ServicioComentarios: ComentariosService,
     public ServicioUsuarios: UsuariosService,
     private rutaActual: ActivatedRoute,
+    private router: Router,
     private sanitizer: DomSanitizer
   ) { 
 
@@ -47,6 +48,12 @@ export class PublicacionComponent implements OnInit {
       console.log(res);
       this.publicacion = res.data as Publicacion;
       this.publicacion.usuario = res.usuario as Usuario;
+
+
+      if (res.message == "Publicacion invisible"){
+        this.router.navigate(["/inicio/publicaciones"]);
+      }
+
 
       console.log(this.isYoutube);
       console.log(this.publicacion.link);

@@ -1,13 +1,24 @@
 
   <div class ="mt-2" style="height: 85%;" >
-    <div class="alert alert-primary alert-dismissible fade show" *ngFor="let comentario of comentarios; let indice = index;">
-      {{ comentario.comentario }}
-        <button *ngIf="this.ServicioUsuarios.usuarioActivo.c_usuario == comentario.c_usuario" class="btn btn-warning close" (click)="open(content,comentario.c_comentario, comentario.comentario, indice)">
-          <span aria-hidden="true">E</span>
-        </button>
-        <button *ngIf="this.ServicioUsuarios.usuarioActivo.c_usuario == comentario.c_usuario" type="button" class="btn btn-danger close" data-dismiss="alert" aria-label="Close" (click)="eliminarComentario(comentario.c_comentario, indice)">
-          <span aria-hidden="true">X</span>
-        </button>
+
+    <div class="mb-3 bg-light" *ngFor="let comentario of comentarios; let indice = index;">
+      <div class="row" style="min-height: 3rem;">
+        <div class="col bg-light">
+          {{ comentario.comentario }}
+        </div>
+      </div>
+      <div class="row" style="max-height: 1rem;" >
+        <div class="col bg-warning">
+          <a *ngIf="this.ServicioUsuarios.usuarioActivo.c_usuario == comentario.c_usuario"  (click)="open(content,comentario.c_comentario, comentario.comentario, indice)" >
+            Editar
+          </a>
+        </div>
+        <div class="col bg-danger">
+          <a *ngIf="this.ServicioUsuarios.usuarioActivo.c_usuario == comentario.c_usuario"  (click)="eliminarComentario(comentario.c_comentario, indice)">
+            Eliminar
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 

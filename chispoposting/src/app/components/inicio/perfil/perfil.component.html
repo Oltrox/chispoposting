@@ -75,11 +75,11 @@
     <div *ngIf="publicacionesUsuario.length > 0 && isLoadedPublicaciones else nohay">
       <div class="row text-center text-lg-left">
         <div class="col-lg-3 col-md-4 col-6 mb-4" *ngFor="let publicacion of publicacionesUsuario" >
-          <a [routerLink]="['/publicacion', publicacion.c_publicacion ]" class="d-block text-center my-auto h-100 bg-info">
+          <a [routerLink]="['/publicacion', publicacion.c_publicacion ]" class="d-block text-center my-auto h-100 bg-dark">
 
-            <img *ngIf="miniaturas[publicacionesUsuario.indexOf(publicacion)] == 0" src="https://img.icons8.com/ios/100/000000/paste-as-text.png" height="150px" width="150px"/>
-            <img *ngIf="miniaturas[publicacionesUsuario.indexOf(publicacion)] == 1" src="https://img.icons8.com/ios/100/000000/video.png" height="150px" width="150px"/>
-            <img *ngIf="miniaturas[publicacionesUsuario.indexOf(publicacion)] == 2" src="https://img.icons8.com/ios/100/000000/image.png" height="150px" width="150px"/>
+            <img *ngIf="miniaturas[publicacionesUsuario.indexOf(publicacion)] == 0" src="https://img.icons8.com/ios/100/000000/paste-as-text.png" height="150px" width="150px" style="filter: invert(100%);"/>
+            <img *ngIf="miniaturas[publicacionesUsuario.indexOf(publicacion)] == 1" src="https://img.icons8.com/ios/100/000000/video.png" height="150px" width="150px" style="filter: invert(100%);"/>
+            <img *ngIf="miniaturas[publicacionesUsuario.indexOf(publicacion)] == 2" src="https://img.icons8.com/ios/100/000000/image.png" height="150px" width="150px" style="filter: invert(100%);"/>
 
           </a>
         </div>

@@ -1,7 +1,7 @@
-<nav class="navbar navbar-expand-lg navbar-info bg-info">
+<nav class="navbar navbar-expand-lg navbar-info bg-warning">
     
     <a class="navbar-brand">
-        <span class="navbar-text text-white">Moderación</span>
+        <h3 class="navbar-text text-dark">Moderación</h3>
     </a>
 
     <button class="navbar-toggler" type="button" (click)="navbar2Collapsed = !navbar2Collapsed" [attr.aria-expanded]="!navbar2Collapsed" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -14,34 +14,34 @@
         <div class="row" *ngIf="tipo == 'ninguno'">No hay controles disponibles</div>
 
         <div class="row" *ngIf="tipo == 'publicacion'">
-          <li class="nav-item mx-1">
-              <button type="button" class="btn btn-danger" (click)="ver()">Ver publicacion actual</button>  
-          </li>
+          <!-- <li class="nav-item mx-1">
+              <button type="button" class="btn btn-dark" (click)="ver()">Ver publicacion actual</button>  
+          </li> -->
   
           <li class="nav-item mx-1">
-              <button type="button" class="btn btn-danger" (click)="marcarPublicacionRiesgosa()">Marcar riesgo</button>  
+              <button type="button" class="btn btn-dark" (click)="marcarPublicacionRiesgosa()">Marcar riesgo</button>  
           </li>
         </div>
 
         <div class="row" *ngIf="tipo == 'perfil'">
           <li class="nav-item mx-1">
-            <button type="button" class="btn btn-danger" (click)="asignarMembresiaCastigo()">Asignar membresía castigo</button>  
+            <button type="button" class="btn btn-dark" (click)="asignarMembresiaCastigo()">Asignar membresía castigo</button>  
           </li>
           
           <li class="nav-item mx-1">
-            <button type="button" class="btn btn-danger" (click)="asignarMembresiaEliminacion()">Asignar membresía eliminacion</button>  
+            <button type="button" class="btn btn-dark" (click)="asignarMembresiaEliminacion()">Asignar membresía eliminacion</button>  
           </li>
           
           <li class="nav-item mx-1">
-            <button type="button" class="btn btn-danger" (click)="openAsignarCastigo(content)">Asignar castigo</button>  
+            <button type="button" class="btn btn-dark" (click)="openAsignarCastigo(content)">Asignar castigo</button>  
           </li>
 
           <div class="row mx-1" *ngIf="ServicioUsuarios.usuarioActivo.tipo == 2">
             <li class="nav-item mx-1" *ngIf="usuario.tipo == 0">
-              <button type="button" class="btn btn-danger" (click)="asignarModeracion()">Asignar Moderador</button>  
+              <button type="button" class="btn btn-dark" (click)="asignarModeracion()">Asignar Moderador</button>  
             </li>
             <li class="nav-item mx-1" *ngIf="usuario.tipo == 1">
-              <button type="button" class="btn btn-danger" (click)="quitarModeracion()">Quitar Moderador</button>  
+              <button type="button" class="btn btn-dark" (click)="quitarModeracion()">Quitar Moderador</button>  
             </li>
           </div>
           

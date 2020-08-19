@@ -1,1 +1,19 @@
-<p>administrador works!</p>
+
+<div class="container pt-4 pb-4" style="background-color:rgb(80, 80, 80);">
+    <div class="row">
+        <div class="col">
+
+        </div>
+        <div class="col-7">
+            <a type="button" class="btn btn-warning" routerLink="/inicio/administrar/publicaciones" *ngIf="ServicioUsuarios.usuarioActivo.tipo == 2">Todas las publicaciones</a>
+            <a type="button" class="btn btn-warning" routerLink="/inicio/administrar/riesgosas" *ngIf="ServicioUsuarios.usuarioActivo.tipo == 2">Todas las publicaciones riesgosas</a>
+            <a type="button" class="btn btn-warning" routerLink="/inicio/administrar/usuarios" *ngIf="ServicioUsuarios.usuarioActivo.tipo == 2">Todas los usuarios</a>
+        </div>
+        <div class="col">
+            
+        </div>
+    </div>
+</div>
+
+
+<router-outlet></router-outlet>

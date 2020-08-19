@@ -49,12 +49,13 @@ export class LoginComponent implements OnInit {
       this.ServicioUsuarios.login(login_usuario).subscribe((res)=>{
 
         if(res.message == "Correctamente logeado"){
-          console.log(res.token);
           this.ServicioUsuarios.crearSesion(login_usuario.id, res.token);
           this.router.navigate(["inicio"]);
-        }
-
-        if(res.message == "Contrasena incorrecta"){
+        }else if (res.message == "Usuario castigado"){
+          alert("El usuario ha sido castigado. Debera esperar hasta que pueda volver a entrar");
+        }else if (res.message == "Usuario eliminado"){
+          alert("Esta cuenta ha sido eliminada por el sistema. No hay nada que hacer");
+        }else if (res.message == "Contrasena incorrecta"){
           alert("Usuario o contraseña incorrectos");
         }
 

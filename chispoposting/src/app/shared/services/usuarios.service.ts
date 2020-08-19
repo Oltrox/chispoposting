@@ -77,6 +77,14 @@ export class UsuariosService {
     return this.http.put<any>(`${this.ruta}/usuario/moderador/quitar/`,usuario);
   }
 
+  todosUsuarios():Observable<any>{
+    return this.http.get<any>(`${this.ruta}/usuario/`);
+  }
+
+  eliminarUsuario(c_usuario:number):Observable<any>{
+    return this.http.delete<any>(`${this.ruta}/usuario/${c_usuario}`);
+  }
+
   crearSesion(usuario:string, token:string){
     localStorage.setItem("usuario",usuario);
     localStorage.setItem("token",token);

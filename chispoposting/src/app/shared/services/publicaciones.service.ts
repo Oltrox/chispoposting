@@ -48,4 +48,21 @@ export class PublicacionesService {
     return this.http.delete<any>(`${this.ruta}/invisible/${c_publicacion}`);
   }
 
+  publicacionesAdmin():Observable<any>{
+    return this.http.get<any>(`${this.ruta}/usuarioAdmin/`);
+  }
+
+  publicacionesRiesgosas():Observable<any>{
+    return this.http.get<any>(`${this.ruta}/riesgosas/`);
+  }
+
+
+  quitarRiesgo(c_publicacion:number):Observable<any> {
+    return this.http.put<any>(`${this.ruta}/visible/${c_publicacion}`,{});
+  }
+
+  eliminarPublicacion(c_publicacion:number):Observable<any>{
+    return this.http.delete<any>(`${this.ruta}/delete/${c_publicacion}`);
+  }
+
 }
