@@ -50,6 +50,9 @@ const Usuario = sequelize.define('usuario', {
     m_castigo: {
         type: Sequelize.SMALLINT
     },
+    f_castigo: {
+        type: Sequelize.DATE
+    },
     m_elimicacion: {
         type: Sequelize.SMALLINT
     },

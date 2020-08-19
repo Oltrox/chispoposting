@@ -86,6 +86,7 @@ export async function createUsuario(req, res) {
             n_seguidos: 0,
             n_publicaciones: 0,
             m_castigo: 0,
+            f_castigo: Date.now(),
             m_elimicacion: 0,
             estado: 0,
             token: createToken(id)
@@ -177,8 +178,8 @@ export async function getUsuario(req, res) {
 export async function getUsuarioId(req, res) {
     try {
         let usuarios = await Usuario.findAll({
-            attributes: ['id'],
-            where:{
+            attributes: ['id', 'topico'],
+            where: {
                 estado: 0
             }
         });
@@ -210,7 +211,7 @@ export async function deleteUsuario(req, res) {
         if (usuario.m_elimicacion == 0) {
 
             var usuario = await Usuario.update({
-                m_elimicacion: -1
+                estado: 1
             }, {
                 where: {
                     c_usuario: c_usuario
@@ -218,7 +219,7 @@ export async function deleteUsuario(req, res) {
             });
         } else {
             var usuario = await Usuario.update({
-                m_elimicacion: 0
+                estado: 0
             }, {
                 where: {
                     c_usuario: c_usuario
@@ -273,7 +274,7 @@ export async function updateUsuario(req, res) {
                     message: 'Contrasena incorrecta',
                     data: {}
                 });
-            } if (!bcrypt.compareSync(c_nueva, usuario.password)) {
+            } if (bcrypt.compareSync(c_nueva, usuario.password)) {
                 return res.json({
                     message: 'La nueva contrasena es la misma que la antigua',
                     data: {}
@@ -340,22 +341,38 @@ export async function login(req, res) {
     }).then(async (usuario) => {
         if (usuario === undefined) {
             res.json({
-                message: 'Usuario no existe'
+                message: 'Usuario no existe',
+                data: {}
             });
         } else {
-            const equals = bcrypt.compareSync(password, usuario.password);
-            if (!equals) {
-                res.json({
-                    message: 'Contrasena incorrecta'
-                });
-            } else {
-                usuario.token = createToken(usuario.id);
-                await usuario.save();
-                await usuario.reload().then(() => {
+            if (usuario.estado == 0) {
+                const equals = bcrypt.compareSync(password, usuario.password);
+                if (!equals) {
                     res.json({
-                        message: 'Correctamente logeado',
-                        token: usuario.token
+                        message: 'Contrasena incorrecta',
+                        data: {}
                     });
+                } else {
+                    if ( usuario.f_castigo < moment().toDate() ) {
+                        usuario.token = createToken(usuario.id);
+                        await usuario.save();
+                        await usuario.reload().then(() => {
+                            res.json({
+                                message: 'Correctamente logeado',
+                                token: usuario.token
+                            });
+                        });
+                    } else {
+                        res.json({
+                            message: 'Usuario castigado',
+                            data: {}
+                        });
+                    };
+                };
+            } else {
+                res.json({
+                    message: 'Usuario eliminado',
+                    data: {}
                 });
             };
         };
@@ -396,5 +413,250 @@ export async function logout(req, res) {
             message: 'Somethin goes wrong',
             data: {}
         });
-    }
+    };
 };
+
+export async function asignarCastigo(req, res) {
+    console.log(req.body);
+    try {
+        var { c_usuario, tiempo } = req.body;
+
+        /*
+        var fecha_1 = moment().add();
+        var fecha_2 = moment().add(10, 'm');
+        var d = new Date(Date.now());
+        */
+
+        var fecha_castigo = moment().add(tiempo, 'm').toDate();
+
+        await Usuario.findOne({
+            where: {
+                c_usuario: c_usuario
+            }
+        }).then(async (usuario) => {
+            if (usuario) {
+                /*
+                console.log(moment().format());
+                console.log(moment(fecha_castigo).format());
+                console.log(moment(usuario.f_castigo).format());
+                */
+                if (usuario.m_castigo == 1) {
+                    usuario.m_castigo = 2;
+                    usuario.save();
+                    usuario.reload();
+                    res.json({
+                        message: 'Usuario a evitado castigo',
+                        data: {}
+                    });
+                } else {
+                    if (usuario.f_castigo < moment().toDate()) {
+                        usuario.f_castigo = fecha_castigo;
+                        usuario.save();
+                        usuario.reload();
+                        res.json({
+                            message: 'Usuario castigado',
+                            data: {}
+                        });
+                    } else {
+                        res.json({
+                            message: 'Usuario ya castigado',
+                            data: {}
+                        });
+                    };
+                }
+            } else {
+                res.json({
+                    message: 'Usuario no encontrado',
+                    data: {}
+                });
+            };
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: 'Something goes wrong',
+            data: {}
+        });
+    };
+};
+
+export async function asignarMembresiaCastigo(req, res) {
+    console.log(req.body);
+    try {
+        var { c_usuario } = req.body;
+
+        await Usuario.findOne({
+            where: {
+                c_usuario: c_usuario
+            }
+        }).then(async (usuario) => {
+            if (usuario) {
+                if (usuario.m_castigo == 2) {
+                    res.json({
+                        message: 'Ya tuvo membresia',
+                        data: {}
+                    });
+                } else {
+                    if (usuario.m_castigo == 0) {
+                        usuario.m_castigo = 1;
+                        await usuario.save();
+                        await usuario.reload();
+                        res.json({
+                            message: 'Membresia asignada',
+                            data: {}
+                        });
+                    } else {
+                        res.json({
+                            message: 'Ya tiene membresia',
+                            data: {}
+                        });
+                    };
+                };
+            } else {
+                res.json({
+                    message: 'Usuario no encontrado',
+                    data: {}
+                });
+            };
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: 'Something goes wrong',
+            data: {}
+        });
+    };
+};
+
+export async function asignarMembresiaEliminacion(req, res) {
+    console.log(req.body);
+    try {
+        var { c_usuario } = req.body;
+
+        await Usuario.findOne({
+            where: {
+                c_usuario: c_usuario
+            }
+        }).then(async (usuario) => {
+            if (usuario) {
+                if (usuario.m_elimicacion == 2) {
+                    res.json({
+                        message: 'Ya tuvo membresia',
+                        data: {}
+                    });
+                } else {
+                    if (usuario.m_elimicacion == 0) {
+                        usuario.m_elimicacion = 1;
+                        await usuario.save();
+                        await usuario.reload();
+                        res.json({
+                            message: 'Membresia asignada',
+                            data: {}
+                        });
+                    } else {
+                        res.json({
+                            message: 'Ya tiene membresia',
+                            data: {}
+                        });
+                    };
+                };
+            } else {
+                res.json({
+                    message: 'Usuario no encontrado',
+                    data: {}
+                });
+            };
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: 'Something goes wrong',
+            data: {}
+        });
+    };
+};
+
+export async function asignarModerador(req, res) {
+    console.log(req.body);
+    try {
+        var { c_usuario } = req.body;
+
+        await Usuario.findOne({
+            where: {
+                c_usuario: c_usuario
+            }
+        }).then(async (usuario) => {
+            if (usuario) {
+                if (usuario.tipo == 0) {
+                    usuario.tipo = 1;
+                    await usuario.save();
+                    await usuario.reload();
+                    res.json({
+                        message: 'Convertido en moderador',
+                        data: {}
+                    });
+                } else {
+                    res.json({
+                        message: 'Ya es moderador',
+                        data: {}
+                    });
+                };
+
+            } else {
+                res.json({
+                    message: 'Usuario no encontrado',
+                    data: {}
+                });
+            };
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: 'Something goes wrong',
+            data: {}
+        });
+    };
+};
+
+export async function quitarModerador(req, res) {
+    console.log(req.body);
+    try {
+        var { c_usuario } = req.body;
+
+        await Usuario.findOne({
+            where: {
+                c_usuario: c_usuario
+            }
+        }).then(async (usuario) => {
+            if (usuario) {
+                if (usuario.tipo == 1) {
+                    usuario.tipo = 2;
+                    await usuario.save();
+                    await usuario.reload();
+                    res.json({
+                        message: 'Convertido en usuario',
+                        data: {}
+                    });
+                } else {
+                    res.json({
+                        message: 'Ya es usuario',
+                        data: {}
+                    });
+                };
+
+            } else {
+                res.json({
+                    message: 'Usuario no encontrado',
+                    data: {}
+                });
+            };
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: 'Something goes wrong',
+            data: {}
+        });
+    };
+};
+

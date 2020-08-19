@@ -145,7 +145,6 @@ export async function getPublicacionesUsuario(req, res) {
     console.log(req.body);
 
     var { id } = req.params;
-    var publicacionesUsuario = []
 
     await Usuario.findOne({
         where: sequelize.where(
@@ -166,6 +165,8 @@ export async function getPublicacionesUsuario(req, res) {
         return Promise.all(promesas).then((publicaciones) => {
             usuario.password = undefined;
             usuario.token = undefined;
+            console.log("########################");
+            console.log("########################");
             res.json({
                 message: 'Publicaciones obtenidas',
                 usuario: usuario,
@@ -193,11 +194,11 @@ export async function getPublicacion(req, res) {
         }
     }).then(async (publicacion) => {
         await Usuario.findOne({
-                where: {
-                    c_usuario: publicacion.c_usuario,
-                    estado: 0
-                }
+            where: {
+                c_usuario: publicacion.c_usuario,
+                estado: 0
             }
+        }
         ).then((usuario) => {
             usuario.password = undefined;
             usuario.token = undefined;
@@ -278,6 +279,70 @@ export async function getPublicacionesTopico(req, res) {
     });
 };
 
+export async function getPublicacionesRiesgosas(req, res) {
+
+    var publicacionesUsuarios = [];
+    await Usuario.findAll({
+        where: {
+            estado: 0
+        }
+    }).then((usuarios) => {
+        var promesas = [];
+        for (let i = 0; i < usuarios.length; i++) {
+            promesas.push(
+                Publicacion.findAll({
+                    where: {
+                        c_usuario: usuarios[i].c_usuario,
+                        eliminado: 0
+                    }
+                })
+            );
+        };
+        return Promise.all(promesas);
+    }).then((publicaciones) => {
+
+        Usuario.findAll({
+            where: {
+                estado: 0
+            }
+        }).then((usuarios) => {
+            for (let i = 0; i < usuarios.length; i++) {
+                var publicacionesUsuario = [];
+                for (let j = 0; j < publicaciones.length; j++) {
+                    if (publicaciones[j]) {
+                        for (let k = 0; k < publicaciones[j].length; k++) {
+                            if (publicaciones[j][k].c_usuario == usuarios[i].c_usuario && publicaciones[j][k].visible == 1) {
+                                publicacionesUsuario.push({
+                                    publicacion: publicaciones[j][k]
+                                });
+                            };
+                        };
+                    };
+                };
+                if (publicacionesUsuario.length > 0) {
+                    usuarios[i].password = undefined;
+                    usuarios[i].token = undefined;
+                    publicacionesUsuarios.push({
+                        usuario: usuarios[i],
+                        publicaciones: publicacionesUsuario
+                    });
+                };
+            };
+        }).then(() => {
+            res.json({
+                message: 'publicaciones obtenidas',
+                data: { publicacionesUsuarios }
+            });
+        });
+    }).catch(error => {
+        console.log(error);
+        res.status(500).json({
+            message: 'something goes wrong',
+            data: { perro: 'perro' }
+        });
+    });
+};
+
 export async function getUsuariosTopico(req, res) {
     var { topico } = req.params;
 
@@ -329,8 +394,6 @@ export async function getPublicacionesPropias(req, res) {
     };
 };
 
-
-
 export async function invisiblePublicacion(req, res) {
     console.log(req.params);
     try {
@@ -345,7 +408,8 @@ export async function invisiblePublicacion(req, res) {
             plain: true
         });
         res.json({
-            data: publicacion
+            data: publicacion,
+            message: 'marcada correctamente'
         });
     } catch (error) {
         console.log(error);
