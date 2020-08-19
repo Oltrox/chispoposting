@@ -81,7 +81,6 @@ export async function getPublicaciones(req, res) {
 };
 
 export async function getPublicacionesUsuarios(req, res) {
-
     var publicacionesUsuarios = []
     await Usuario.findAll({
         where: {
@@ -126,6 +125,66 @@ export async function getPublicacionesUsuarios(req, res) {
                 }
             }
         }
+    }).then(() => {
+        res.json({
+            message: 'publicaciones obtenidas',
+            data: { publicacionesUsuarios }
+        });
+    }).catch(error => {
+        console.log(error);
+        res.status(500).json({
+            message: 'something goes wrong',
+            data: { perro: 'perro' }
+        });
+    });
+};
+
+export async function getPublicacionesUsuariosAdministrador(req, res) {
+
+    var publicacionesUsuarios = []
+    await Usuario.findAll({
+        where: {
+            estado: 0
+        }
+    }).then((usuarios) => {
+        var promesas = [];
+        for (let i = 0; i < usuarios.length; i++) {
+            promesas.push(
+                Publicacion.findAll({
+                    where: {
+                        c_usuario: usuarios[i].c_usuario,
+                        eliminado: 0
+                    }
+                })
+            );
+        };
+        return Promise.all(promesas);
+    }).then(async (publicaciones) => {
+
+        await Usuario.findAll({
+            where: {
+                estado: 0
+            }
+        }).then((usuarios) => {
+            for (let i = 0; i < usuarios.length; i++) {
+                for (let j = 0; j < publicaciones.length; j++) {
+                    if (publicaciones[j]) {
+                        for (let k = 0; k < publicaciones[j].length; k++) {
+                            if (publicaciones[j][k].c_usuario == usuarios[i].c_usuario) {
+
+                                usuarios[i].password = undefined;
+                                usuarios[i].token = undefined;
+                                publicaciones[j][k].usuario = usuarios[i];
+
+                                publicacionesUsuarios.push(
+                                    publicaciones[j][k]
+                                );
+                            };
+                        };
+                    };
+                };
+            };
+        });
     }).then(() => {
         res.json({
             message: 'publicaciones obtenidas',
@@ -192,23 +251,30 @@ export async function getPublicacion(req, res) {
             visible: 0,
             eliminado: 0
         }
-    }).then(async (publicacion) => {
-        await Usuario.findOne({
-            where: {
-                c_usuario: publicacion.c_usuario,
-                estado: 0
-            }
-        }
-        ).then((usuario) => {
-            usuario.password = undefined;
-            usuario.token = undefined;
-            console.log(usuario);
-            res.json({
-                message: 'Publicacion obtenida',
-                usuario: usuario,
-                data: publicacion
+    }).then((publicacion) => {
+        if (publicacion) {
+            console.log(publicacion);
+            Usuario.findOne({
+                where: {
+                    c_usuario: publicacion.c_usuario,
+                    estado: 0
+                }
+            }).then((usuario) => {
+                usuario.password = undefined;
+                usuario.token = undefined;
+                console.log(usuario);
+                res.json({
+                    message: 'Publicacion obtenida',
+                    usuario: usuario,
+                    data: publicacion
+                });
             });
-        });
+        } else {
+            res.json({
+                message: 'Publicacion invisible',
+                data: {}
+            });
+        };
     }).catch((error) => {
         console.log(error);
         res.status(500).json({
@@ -307,26 +373,30 @@ export async function getPublicacionesRiesgosas(req, res) {
             }
         }).then((usuarios) => {
             for (let i = 0; i < usuarios.length; i++) {
-                var publicacionesUsuario = [];
                 for (let j = 0; j < publicaciones.length; j++) {
                     if (publicaciones[j]) {
                         for (let k = 0; k < publicaciones[j].length; k++) {
                             if (publicaciones[j][k].c_usuario == usuarios[i].c_usuario && publicaciones[j][k].visible == 1) {
-                                publicacionesUsuario.push({
-                                    publicacion: publicaciones[j][k]
-                                });
+
+                                usuarios[i].password = undefined;
+                                usuarios[i].token = undefined;
+                                publicaciones[j][k].usuario = usuarios[i];
+
+                                publicacionesUsuarios.push(
+                                    publicaciones[j][k]
+                                );
                             };
                         };
                     };
                 };
-                if (publicacionesUsuario.length > 0) {
-                    usuarios[i].password = undefined;
-                    usuarios[i].token = undefined;
-                    publicacionesUsuarios.push({
-                        usuario: usuarios[i],
-                        publicaciones: publicacionesUsuario
-                    });
-                };
+                // if (publicacionesUsuario.length > 0) {
+                //     usuarios[i].password = undefined;
+                //     usuarios[i].token = undefined;
+                //     publicacionesUsuarios.push({
+                //         usuario: usuarios[i],
+                //         publicaciones: publicacionesUsuario
+                //     });
+                // };
             };
         }).then(() => {
             res.json({
@@ -394,7 +464,7 @@ export async function getPublicacionesPropias(req, res) {
     };
 };
 
-export async function invisiblePublicacion(req, res) {
+export async function colocarInvisiblePublicacion(req, res) {
     console.log(req.params);
     try {
         var { c_publicacion } = req.params;
@@ -420,6 +490,32 @@ export async function invisiblePublicacion(req, res) {
     };
 };
 
+export async function quitarInvisiblePublicacion(req, res) {
+    console.log(req.params);
+    try {
+        var { c_publicacion } = req.params;
+        var publicacion = await Publicacion.update({
+            visible: 0
+        }, {
+            where: {
+                c_publicacion: c_publicacion
+            },
+            returning: true,
+            plain: true
+        });
+        res.json({
+            data: publicacion,
+            message: 'desmarcada correctamente'
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: 'something goes wrong',
+            data: {}
+        });
+    };
+};
+
 export async function deletePublicacion(req, res) {
     console.log(req.params);
     try {
@@ -434,6 +530,7 @@ export async function deletePublicacion(req, res) {
             plain: true
         });
         res.json({
+            message: 'Publicacion eliminada',
             data: publicacion
         });
     } catch (error) {
@@ -461,6 +558,7 @@ export async function updatePublicacion(req, res) {
             plain: true
         });
         res.json({
+            message: 'Publicacion modificada',
             data: publicacion
         });
     } catch (error) {

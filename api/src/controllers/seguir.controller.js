@@ -13,39 +13,52 @@ export async function createSeguir(req, res) {
         )
     }).then((usuario_1) => {
         if (usuario_1) {
-            Usuario.findOne({
-                where: sequelize.where(
-                    sequelize.fn('lower', sequelize.col('id')),
-                    sequelize.fn('lower', id_2.toLowerCase())
-                )
-            }).then((usuario_2) => {
-                if (usuario_2) {
-
-                    Seguir.create({
-                        c_usuario_1: usuario_1.c_usuario,
-                        c_usuario_2: usuario_2.c_usuario,
-                        f_seguir: Date.now()
-                    }).then((newSeguir) => {
-                        if (newSeguir) {
-                            res.json({
-                                message: 'Seguir creado',
-                                data: { newSeguir }
+            if (usuario_1.estado == 0) {
+                Usuario.findOne({
+                    where: sequelize.where(
+                        sequelize.fn('lower', sequelize.col('id')),
+                        sequelize.fn('lower', id_2.toLowerCase())
+                    )
+                }).then((usuario_2) => {
+                    if (usuario_2) {
+                        if (usuario_2.estado == 0) {
+                            Seguir.create({
+                                c_usuario_1: usuario_1.c_usuario,
+                                c_usuario_2: usuario_2.c_usuario,
+                                f_seguir: Date.now()
+                            }).then((newSeguir) => {
+                                if (newSeguir) {
+                                    res.json({
+                                        message: 'Seguir creado',
+                                        data: { newSeguir }
+                                    });
+                                };
+                            }).catch((error) => {
+                                console.log(error);
+                                res.status(500).json({
+                                    message: 'Something goes wrong',
+                                    data: {}
+                                });
                             });
-                        };
-                    }).catch((error) => {
-                        console.log(error);
-                        res.status(500).json({
-                            message: 'Something goes wrong',
+                        } else {
+                            res.json({
+                                message: 'Usuario 2 eliminado',
+                                data: {}
+                            });
+                        }
+                    } else {
+                        res.json({
+                            message: 'Usuario 2 no encontrado',
                             data: {}
                         });
-                    });
-                } else {
-                    res.json({
-                        message: 'Usuario 2 no encontrado',
-                        data: {}
-                    });
-                }
-            });
+                    }
+                });
+            } else {
+                res.json({
+                    message: 'Usuario 1 eliminado',
+                    data: {}
+                });
+            }
         } else {
             res.json({
                 message: 'Usuario 1 no encontrado',
@@ -65,7 +78,7 @@ export async function getSeguirSeguidores(req, res) {
     console.log(req.params);
     var { id } = req.params;
 
-    await Seguir.findAll({
+    await Usuario.findOne({
         where: sequelize.where(
             sequelize.fn('lower', sequelize.col('id')),
             sequelize.fn('lower', id.toLowerCase())
@@ -145,7 +158,7 @@ export async function getSeguirSeguidos(req, res) {
     });
 };
 
-export async function getSeguirSeguido(req, res){
+export async function getSeguirSeguido(req, res) {
     console.log(req.body);
     var { id_1, id_2 } = req.body;
 
@@ -165,7 +178,7 @@ export async function getSeguirSeguido(req, res){
                 if (usuario_2) {
 
                     Seguir.findOne({
-                        where:{
+                        where: {
                             c_usuario_1: usuario_1.c_usuario,
                             c_usuario_2: usuario_2.c_usuario,
                         }

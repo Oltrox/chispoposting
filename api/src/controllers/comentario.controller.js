@@ -132,7 +132,12 @@ export async function deleteComentario ( req, res ) {
                 message: 'Comentario deleted',
                 data: comentario
             });
-        }
+        } else {
+            res.json({
+                message: 'Comentario no encontrado',
+                data: {}
+            });
+        };
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -150,7 +155,8 @@ export async function updateComentario ( req, res ) {
         var { detalle } = req.body;
 
         let comentario = await Comentario.update({
-            comentario: detalle
+            comentario: detalle,
+            f_modificacion: Date.now()
         },{
             where:{
                 c_comentario: c_comentario

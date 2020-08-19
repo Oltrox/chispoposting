@@ -34,23 +34,30 @@ export async function checkToken(req, res, next) {
                 message: 'Token expirado'
             });
         };
-        let usuario = await Usuario.findOne({
+        await Usuario.findOne({
             where: {
                 id: payload.userId
             }
-        });
-        if (usuario) {
-            if (usuario.token.localeCompare(token) == 0) {
-                console.log("##########Token valido###############");
+        }).then((usuario) => {
+            if (usuario) {
+                if (usuario.token.localeCompare(token) == 0) {
+                    console.log("##########Token valido###############");
 
-                req.id = payload.id;
-                next();
-            } else {
-                return res.json({
-                    message: 'Token invalido'
-                });
+                    req.id = payload.id;
+                    next();
+                } else {
+                    return res.json({
+                        message: 'Token invalido'
+                    });
+                };
             };
-        };
+        }).catch((error) => {
+            console.log(error);
+            return res.json({
+                message: 'Token invalido',
+                data: {}
+            });
+        });
     } catch (error) {
         console.log(error);
         return res.json({
@@ -86,7 +93,7 @@ export async function createUsuario(req, res) {
             n_seguidos: 0,
             n_publicaciones: 0,
             m_castigo: 0,
-            f_castigo: Date.now(),
+            f_castigo: null,
             m_elimicacion: 0,
             estado: 0,
             token: createToken(id)
@@ -157,7 +164,9 @@ export async function getUsuario(req, res) {
         });
         if (usuario) {
             usuario.password = undefined;
+            usuario.token = undefined;
             res.json({
+                message: 'Usuario obtenido',
                 data: usuario
             });
         } else {
@@ -199,33 +208,47 @@ export async function getUsuarioId(req, res) {
 //pasar de eliminar a modificar el estado del usuario
 // Actualizar base de datos para añadir estado 0: no eliminado - 1: eliminado
 export async function deleteUsuario(req, res) {
-    console.log(req.body);
+    console.log(req.params);
     try {
         var { c_usuario } = req.params;
         var usuario = await Usuario.findOne({
-            where: sequelize.where(
-                sequelize.fn('lower', sequelize.col('id')),
-                sequelize.fn('lower', id.toLowerCase())
-            )
+            where: {
+                c_usuario: c_usuario
+            }
         });
-        if (usuario.m_elimicacion == 0) {
-
-            var usuario = await Usuario.update({
-                estado: 1
-            }, {
-                where: {
-                    c_usuario: c_usuario
-                }
-            });
+        if (usuario.estado != 1) {
+            if (usuario.m_elimicacion == 0 || usuario.m_elimicacion == 2) {
+                var usuario = await Usuario.update({
+                    estado: 1
+                }, {
+                    where: {
+                        c_usuario: c_usuario
+                    }
+                });
+                res.json({
+                    message: 'Usuario eliminado',
+                    data: {}
+                });
+            } else {
+                var usuario = await Usuario.update({
+                    m_elimicacion: 2
+                }, {
+                    where: {
+                        c_usuario: c_usuario
+                    }
+                });
+                res.json({
+                    message: 'Usuario perdonado',
+                    data: {}
+                });
+            };
         } else {
-            var usuario = await Usuario.update({
-                estado: 0
-            }, {
-                where: {
-                    c_usuario: c_usuario
-                }
+            res.json({
+                message: 'Usuario ya eliminado',
+                data: {}
             });
         };
+
         if (usuario) {
             res.json({
                 data: usuario
@@ -353,7 +376,7 @@ export async function login(req, res) {
                         data: {}
                     });
                 } else {
-                    if ( usuario.f_castigo < moment().toDate() ) {
+                    if (usuario.f_castigo < moment().toDate()) {
                         usuario.token = createToken(usuario.id);
                         await usuario.save();
                         await usuario.reload().then(() => {
